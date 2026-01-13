@@ -4,6 +4,7 @@
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_mixer/SDL_mixer.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <glm/glm.hpp>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -54,15 +55,13 @@ int main(int, char **)
         return -1;
     }
 
-
-
     // 读取音乐
     MIX_Audio *music = MIX_LoadAudio(mixer, "assets/bgm/OhMyGhost.ogg", false); // 播放音乐
     // --- 播放阶段 ---
     MIX_Track *track = MIX_CreateTrack(mixer); // 创建一条音轨
     // 或者设置音轨的音量
-    MIX_SetTrackAudio(track, music);           // 将音频装载进音轨
-    MIX_PlayTrack(track, 0);                   // 开始播放
+    MIX_SetTrackAudio(track, music); // 将音频装载进音轨
+    MIX_PlayTrack(track, 0);         // 开始播放
     // SDL_TTF初始化
     if (!TTF_Init())
     {
@@ -77,9 +76,11 @@ int main(int, char **)
     SDL_Surface *surface = TTF_RenderText_Solid(font, "Hello, SDL! 中文也可以", 0, color);
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, surface);
 
-    //新文本绘制
+    // 新文本绘制
     TTF_TextEngine *textEngine = TTF_CreateRendererTextEngine(renderer);
     TTF_Text *text = TTF_CreateText(textEngine, font, "Hello, SDL! 中文也可以111", 0);
+    // 鼠标位置
+    glm::vec2 mousePos;
 
     // 渲染循环
     while (true)
@@ -93,7 +94,7 @@ int main(int, char **)
             }
         }
 
-       // 1. 清屏 (所有绘制之前)
+        // 1. 清屏 (所有绘制之前)
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // 建议设个黑色背景，方便观察白色文字
         SDL_RenderClear(renderer);
 
@@ -114,10 +115,23 @@ int main(int, char **)
         // --- 【关键修改点】 ---
         // 必须在 Present 之前调用！
         // 建议换个坐标（如 50, 50），避免和上面的旧文本重叠导致看不清
-        TTF_DrawRendererText(text, 50, 50); 
+        TTF_DrawRendererText(text, 50, 50);
 
         // 3. 提交渲染 (交卷)
         SDL_RenderPresent(renderer);
+
+        // 获得鼠标位置
+        auto state = SDL_GetMouseState(&mousePos.x, &mousePos.y);
+        //SDL_Log("Pos: (%f, %f)", mousePos.x, mousePos.y);
+        // 获得鼠标按键
+        if (state & SDL_BUTTON_LMASK)
+        {
+            SDL_Log("Left button pressed");
+        }
+        if (state & SDL_BUTTON_RMASK)
+        {
+            SDL_Log("Right button pressed");
+        }
     }
 
     // 清理图片资源
@@ -134,7 +148,7 @@ int main(int, char **)
     TTF_CloseFont(font);
     TTF_Quit();
 
-    //清理文本引擎TTF_TextEngine
+    // 清理文本引擎TTF_TextEngine
     TTF_DestroyRendererTextEngine(textEngine);
     TTF_DestroyText(text);
 
