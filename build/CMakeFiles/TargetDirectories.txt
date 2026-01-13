@@ -1,0 +1,3 @@
+/Users/suyp/C++/Projects/LearnGhostEscape/build/CMakeFiles/LearnGhostEscape-Darwin.dir
+/Users/suyp/C++/Projects/LearnGhostEscape/build/CMakeFiles/edit_cache.dir
+/Users/suyp/C++/Projects/LearnGhostEscape/build/CMakeFiles/rebuild_cache.dir

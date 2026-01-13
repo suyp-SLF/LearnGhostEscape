@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/suyp/C++/Projects/LearnGhostEscape/build",
+  "command": "/usr/bin/clang++  -isystem /Users/suyp/C++/Library/build/include -isystem /opt/homebrew/include -g -std=gnu++17 -arch arm64 -Wall -Wextra -Wpedantic -o CMakeFiles/LearnGhostEscape-Darwin.dir/main.cpp.o -c /Users/suyp/C++/Projects/LearnGhostEscape/main.cpp",
+  "file": "/Users/suyp/C++/Projects/LearnGhostEscape/main.cpp",
+  "output": "CMakeFiles/LearnGhostEscape-Darwin.dir/main.cpp.o"
+}
+]
