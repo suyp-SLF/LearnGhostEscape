@@ -19,9 +19,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR})
 
 set(TARGET ${PROJECT_NAME}-${CMAKE_SYSTEM_NAME})
 
-# 1. 设置搜索根目录
+# --- 关键：强制只查找你自定义的路径 ---
 set(MY_SDL_BASE "/Users/suyp/C++/Library/build")
-list(APPEND CMAKE_PREFIX_PATH "${MY_SDL_BASE}")
+set(CMAKE_PREFIX_PATH "${MY_SDL_BASE}")
+# 告诉 CMake 不要去系统默认路径（如 Homebrew）乱找
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 # 查找并载入Cmake预设
 find_package(SDL3 REQUIRED)
@@ -31,16 +33,21 @@ find_package(SDL3_ttf REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
 # 添加可执行文件
-add_executable(${TARGET} main.cpp)
+add_executable(
+    ${TARGET} 
+    src/main.cpp
+    src/core/game.cpp
+    )
 
 # 这样编译器才能进入 /Users/suyp/C++/Library/build/include 找到 SDL3_mixer 文件夹
 target_include_directories(${TARGET} PRIVATE "${MY_SDL_BASE}/include")
 
 # 链接库
-target_link_libraries(${TARGET}
-                        ${SDL3_LIBRARIES}
-                        SDL3_image::SDL3_image
-                        SDL3_mixer::SDL3_mixer
-                        SDL3_ttf::SDL3_ttf
-                        glm::glm
-                        )
+target_link_libraries(
+    ${TARGET}
+    SDL3::SDL3
+    SDL3_image::SDL3_image
+    SDL3_mixer::SDL3_mixer
+    SDL3_ttf::SDL3_ttf
+    glm::glm
+    )

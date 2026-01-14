@@ -1,0 +1,28 @@
+# --- 编译输出目录 ---
+out/
+bin/
+build/
+
+# --- macOS 系统文件 ---
+.DS_Store
+
+# --- 开发工具 (VS Code / Xcode) ---
+.vscode/
+.vs/
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+
+# --- 编译产生的二进制文件 ---
+*-Darwin
+*.o
+*.dylib
+*.a
+
+# --- CMake 产生的临时文件 ---
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+Makefile
