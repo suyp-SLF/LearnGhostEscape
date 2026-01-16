@@ -35,8 +35,14 @@ find_package(glm CONFIG REQUIRED)
 # 添加可执行文件
 add_executable(
     ${TARGET} 
-    src/main.cpp
+    src/core/object.cpp
     src/core/game.cpp
+    src/core/object_world.cpp
+    src/core/scene.cpp
+    src/core/asset_store.cpp
+    src/main.cpp
+    src/player.cpp
+    src/scene_main.cpp
     )
 
 # 这样编译器才能进入 /Users/suyp/C++/Library/build/include 找到 SDL3_mixer 文件夹
