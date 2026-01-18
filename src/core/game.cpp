@@ -3,6 +3,7 @@
 
 #include "actor.h"
 #include "../player.h"
+#include "../affiliate/sprite.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3_mixer/SDL_mixer.h>
@@ -234,6 +235,35 @@ void Game::clean()
     // SDL3销毁SDL
     SDL_Quit();
 }
+void Game::drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, float alpha)
+{
+    // 1. 设置混合模式（必须开启混合模式，Alpha 才会生效）
+    SDL_SetTextureBlendMode(texture.texture, SDL_BLENDMODE_BLEND);
+
+    // 2. 设置透明度调制 (将 0.0~1.0 映射到 0~255)
+    Uint8 alpha_val = static_cast<Uint8>(alpha * 255.0f);
+    SDL_SetTextureAlphaMod(texture.texture, alpha_val);
+
+    SDL_FRect dst_rect = {
+        position.x,
+        position.y,
+        size.x,
+        size.y};
+
+    // 3. 执行绘制
+    SDL_RenderTextureRotated(
+        _renderer, 
+        texture.texture, 
+        &texture.src_rect, 
+        &dst_rect, 
+        texture.angle, 
+        nullptr, 
+        texture.flip
+    );
+
+    // 4. 恢复透明度为不透明（防止同一个纹理在其他地方绘制时变透明）
+    SDL_SetTextureAlphaMod(texture.texture, 255);
+}
 void Game::drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float cell_size, const glm::vec2 offset, const SDL_FColor color)
 {
     SDL_SetRenderDrawColorFloat(_renderer, color.r, color.g, color.b, color.a);
@@ -262,6 +292,28 @@ void Game::drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right
         SDL_RenderRect(_renderer, &rect);
     }
     SDL_SetRenderDrawColorFloat(_renderer, 0, 0, 0, 1);
+}
+void Game::drawRect(const RectData& data) {
+    // 1. 设置颜色 (GLM float 转 SDL Uint8)
+    SDL_SetRenderDrawColor(_renderer, 
+        static_cast<Uint8>(data.color.r * 255), 
+        static_cast<Uint8>(data.color.g * 255), 
+        static_cast<Uint8>(data.color.b * 255), 
+        static_cast<Uint8>(data.color.a * 255)
+    );
+
+    // 2. 开启混合模式
+    SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
+
+    // 3. 构建 SDL 矩形
+    SDL_FRect rect = { data.position.x, data.position.y, data.size.x, data.size.y };
+
+    // 4. 绘制逻辑
+    if (data.filled) {
+        SDL_RenderFillRect(_renderer, &rect);
+    } else {
+        SDL_RenderRect(_renderer, &rect); // 画空心描边
+    }
 }
 void Game::drawFPS(const glm::vec2 &position, const SDL_FColor color)
 {

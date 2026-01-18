@@ -1,5 +1,6 @@
 #include "scene_main.h"
 #include "player.h"
+#include "enemy.h"
 
 void SceneMain::init()
 {
@@ -8,28 +9,34 @@ void SceneMain::init()
     _player = new Player();
     _player->init();
     _player->setPosition(_world_size / 2.0f);
+    addChild(_player);
+
+    auto enemy = new Enemy();
+    enemy->init();
+    enemy->set_target(_player);
+    enemy->setPosition(_world_size / 2.0f + glm::vec2(100.0f, 0.0f));
+    addChild(enemy);
 }
 
 void SceneMain::handleEvents(SDL_Event &event)
 {
+    Scene::handleEvents(event); //父类update
 }
 
 void SceneMain::update(float dt)
 {
-    _camera_position += glm::vec2(1, 1) * dt * 100.0f;
-    _player->update(dt);
+    Scene::update(dt);  //父类update
 }
 
 void SceneMain::render()
 {
     renderBackground();
-    _player->render();
+    Scene::render();    //父类render
 }
 
 void SceneMain::clean()
 {
-    _player->clean();
-    delete _player;
+    Scene::clean(); //父类clean
 }
 
 void SceneMain::renderBackground()

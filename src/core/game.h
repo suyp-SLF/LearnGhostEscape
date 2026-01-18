@@ -2,13 +2,16 @@
 #define GAME_H
 
 #include "asset_store.h"
+#include "data_struct.h"
 
 #include <string>
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_mixer/SDL_mixer.h>
+#include <SDL3_image/SDL_image.h>
 #include <glm/glm.hpp>
 
+struct Texture;
 class Scene;
 class Game
 {
@@ -60,9 +63,12 @@ public:
     Scene* getCurrentScene() const { return _current_scene; }   // 获取当前场景
     AssetStore* getAssetStore() const { return _asset_store; } // 获取资源存储
 
+    //渲染图片
+    void drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, float alpha = 1.f);    // 绘制图片
     // 工具类,用于绘制网格,offset_x和offset_y为网格的偏移量
     void drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float cell_size, const glm::vec2 offset, const SDL_FColor color); // 绘制网格
     void drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const SDL_FColor color); // 绘制边界
+    void drawRect(const RectData& data); // 绘制矩形
     void drawFPS(const glm::vec2 &position, const SDL_FColor color); // 绘制FPS
 };
 #endif // GAME_H

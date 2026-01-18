@@ -5,11 +5,14 @@
 
 class Actor : public ObjectWorld
 {
+
 protected:
     glm::vec2 _velocity = glm::vec2(0);
-    float _max_speed = 500;
-
+    float _max_speed = 100;
+    
 public:
+    void move(float dt);
+
     // getter and setter
     void setVelocity(glm::vec2 velocity) { _velocity = velocity; };
     glm::vec2 getVelocity() { return _velocity; };
