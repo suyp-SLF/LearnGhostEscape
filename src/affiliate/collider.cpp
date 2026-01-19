@@ -12,12 +12,13 @@ void Collider::render()
     #endif
 }
 
-Collider *Collider::addColliderChild(ObjectScreen *parent, glm::vec2 size, Shape shape)
+Collider *Collider::addColliderChild(ObjectScreen *parent, glm::vec2 size, Anchor anchor, Shape shape)
 {
     Collider *collider = new Collider();
     collider->init();
     collider->setParent(parent);
     collider->setSize(size);
+    collider->setOffsetByAnchor(anchor);
     collider->setShape(shape);
     parent->addChild(collider);
     return collider;

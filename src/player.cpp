@@ -1,6 +1,7 @@
 #include "player.h"
 #include "core/scene.h"
 #include "affiliate/sprite_anim.h"
+#include "raw/stats.h"
 
 #include <SDL3/SDL.h>
 
@@ -8,11 +9,12 @@ void Player::init()
 {
     Actor::init();
     _max_speed = 500;
-    _sprite_idle = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-idle.png", 2.f);
-    _sprite_run = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-move.png", 2.1f);
+    _sprite_idle = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-idle.png", Anchor::CENTER, 2.f);
+    _sprite_run = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-move.png", Anchor::CENTER, 2.1f);
     _sprite_idle->setActive(true);
 
-    _collider = Collider::addColliderChild(this, _sprite_idle->getSize());
+    _collider = Collider::addColliderChild(this, _sprite_idle->getSize() / 2.f, Anchor::CENTER);
+    _stats = Stats::addStatsChild(this);
 }
 
 void Player::handleEvents(SDL_Event &event)

@@ -35,7 +35,7 @@ void Scene::update(float dt)
         }
         else if (child->isActive())
         {
-             (*it)->update(dt);
+            (*it)->update(dt);
             ++it;
         }
         else
@@ -121,10 +121,10 @@ void Scene::removeChild(Object *child)
         _children_world.erase(std::remove(_children_world.begin(), _children_world.end(), static_cast<ObjectWorld *>(child)), _children_world.end());
         break;
     case ObjectType::OBJECT_SCREEN:
-        _children_world.erase(std::remove(_children_world.begin(), _children_world.end(), static_cast<ObjectScreen *>(child)), _children_world.end());
+        _children_screen.erase(std::remove(_children_screen.begin(), _children_screen.end(), static_cast<ObjectScreen *>(child)), _children_screen.end());
 
     default:
-        _children_world.erase(std::remove(_children_world.begin(), _children_world.end(), child), _children_world.end());
+        _children.erase(std::remove(_children.begin(), _children.end(), child), _children.end());
         break;
     }
 }

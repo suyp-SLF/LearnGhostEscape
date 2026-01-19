@@ -1,17 +1,20 @@
 #include "enemy.h"
 #include "affiliate/sprite_anim.h"
+#include "raw/stats.h"
 
 #include <SDL3/SDL.h>
 
 void Enemy::init()
 {
     Actor::init();
-    _anim_normal = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-Sheet.png", 2.f);
-    _anim_die = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostDead-Sheet.png", 2.f);
-    _anim_hurt = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostHurt-Sheet.png", 2.f);
+    _anim_normal = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-Sheet.png", Anchor::CENTER, 2.f);
+    _anim_die = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostDead-Sheet.png", Anchor::CENTER, 2.f);
+    _anim_hurt = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostHurt-Sheet.png", Anchor::CENTER, 2.f);
     _anim_normal->setActive(true);
 
-    _collider = Collider::addColliderChild(this, _anim_normal->getSize());
+    _current_anim = _anim_normal;
+    _collider = Collider::addColliderChild(this, _anim_normal->getSize(), Anchor::CENTER);
+    _stats = Stats::addStatsChild(this);
 }
 
 void Enemy::handleEvents(SDL_Event &event)
@@ -40,11 +43,13 @@ void Enemy::clean()
 
 void Enemy::attack()
 {
-    if (!_collider && _target->getCollider())
+    if (!_collider || _target->getCollider() == nullptr)
         return;
     if (_collider->isColliding(_target->getCollider()))
     {
-        SDL_Log("123");
+        if(_stats && _target->getStats()){
+            _target->takeDamage(_stats->getDamage());
+        }
     }
 }
 

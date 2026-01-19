@@ -25,7 +25,7 @@ void Sprite::render()
         return;
     }
     auto pos = _parent->getRenderPosition() + _offset;
-    _game.drawImage(_texture, pos + _offset, _size);
+    _game.drawImage(_texture, pos, _size);
 }
 
 void Sprite::setTexture(const Texture &texture)

@@ -11,6 +11,7 @@ class Object
 protected:
     ObjectType _type = ObjectType::NONE;
     Game &_game = Game::GetInstance();
+    std::vector<Object *> _children_wait_to_add; // 子对象
     std::vector<Object *> _children; // 子对象
     bool _is_active = true; // 是否激活
     bool _is_delete =  false; // 是否需要删除
@@ -25,6 +26,7 @@ public:
     virtual void clean(); // 需要清理的资源，在clean()函数里面做。
 
     // 子对象管理
+    void safeAddChild(Object *child) { _children_wait_to_add.push_back(child); }
     virtual void addChild(Object *child) { _children.push_back(child); }
     virtual void removeChild(Object *child) { _children.erase(std::remove(_children.begin(), _children.end(), child), _children.end()); }
 

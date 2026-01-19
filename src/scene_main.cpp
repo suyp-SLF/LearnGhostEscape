@@ -1,6 +1,7 @@
 #include "scene_main.h"
 #include "player.h"
 #include "enemy.h"
+#include "world/effect.h"
 
 void SceneMain::init()
 {
@@ -11,11 +12,14 @@ void SceneMain::init()
     _player->setPosition(_world_size / 2.0f);
     addChild(_player);
 
+    
+
     auto enemy = new Enemy();
     enemy->init();
     enemy->set_target(_player);
     enemy->setPosition(_world_size / 2.0f + glm::vec2(100.0f, 0.0f));
-    addChild(enemy);
+
+    Effect::addEffectChild(this, "assets/effect/184_3_.png", _world_size / 2.0f + glm::vec2(100.0f, 0.0f), 2.f, enemy); // 添加特效
 }
 
 void SceneMain::handleEvents(SDL_Event &event)

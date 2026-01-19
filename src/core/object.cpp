@@ -14,6 +14,12 @@ void Object::handleEvents(SDL_Event &event)
 
 void Object::update(float dt)
 {
+    for (auto &child : _children_wait_to_add)
+    {
+        _children.push_back(child);
+    }
+    _children_wait_to_add.clear();
+
     if (!_is_active)
         return;
     for (auto it = _children.begin(); it != _children.end();)

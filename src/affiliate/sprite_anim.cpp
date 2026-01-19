@@ -1,6 +1,6 @@
 #include "sprite_anim.h"
 
-SpriteAnim *SpriteAnim::addSpriteAnimChild(ObjectScreen *parent, const std::string &texture_path, float scale)
+SpriteAnim *SpriteAnim::addSpriteAnimChild(ObjectScreen *parent, const std::string &texture_path, Anchor anchor, float scale)
 {
     auto sprite_anim = new SpriteAnim();
     sprite_anim->init();
@@ -8,6 +8,7 @@ SpriteAnim *SpriteAnim::addSpriteAnimChild(ObjectScreen *parent, const std::stri
     sprite_anim->setParent(parent);
     sprite_anim->setScale(scale);
     sprite_anim->setActive(false);
+    sprite_anim->setOffsetByAnchor(anchor);
     parent->addChild(sprite_anim);
     return sprite_anim;
 }
@@ -16,8 +17,9 @@ void SpriteAnim::update(float dt)
 {
     Sprite::update(dt);
     _frame_timer += dt;
-    if (!_is_loop && (_current_frame = _total_frames))
+    if (!_is_loop && (_current_frame == _total_frames))
     {
+        _is_finish = true;
         return;
     }
     if (_frame_timer >= 1.0f / _fps)

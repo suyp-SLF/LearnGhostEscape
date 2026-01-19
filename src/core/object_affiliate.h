@@ -9,7 +9,9 @@ protected:
     ObjectScreen *_parent = nullptr;    // 父节点
     glm::vec2 _offset = glm::vec2(0, 0);    //相对父节点的位置
     glm::vec2 _size = glm::vec2(0, 0);    //大小
+    Anchor _anchor = Anchor::CENTER;    //锚点
 public:
+    void setOffsetByAnchor(const Anchor anchor);
     // GETTER AND SETTER
     void setParent(ObjectScreen *parent) { _parent = parent; }
     ObjectScreen *getParent() { return _parent; }

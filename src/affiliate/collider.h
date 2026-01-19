@@ -16,7 +16,7 @@ public:
 
     virtual void render();
 
-    static Collider* addColliderChild(ObjectScreen* parent, glm::vec2 size, Shape type = Shape::CIRCLE);
+    static Collider* addColliderChild(ObjectScreen* parent, glm::vec2 size, Anchor anchor = Anchor::CENTER, Shape type = Shape::CIRCLE);
     bool isColliding(Collider* other);
 
     // GETTER AND SETTER

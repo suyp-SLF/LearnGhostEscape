@@ -36,18 +36,23 @@ find_package(glm CONFIG REQUIRED)
 add_executable(
     ${TARGET} 
     src/core/data_struct.h
-
     src/core/object.cpp
     src/core/game.cpp
-    
     src/core/object_world.cpp
+    src/core/object_affiliate.cpp
+    src/core/actor.cpp
+    src/core/scene.cpp
+    src/core/asset_store.cpp
+
+    src/raw/stats.cpp
+
+    src/world/effect.cpp
+
     src/affiliate/sprite.cpp
     src/affiliate/sprite_anim.cpp
     src/affiliate/collider.cpp
-    src/core/scene.cpp
-    src/core/asset_store.cpp
+    
     src/main.cpp
-    src/core/actor.cpp
     src/player.cpp
     src/enemy.cpp
     src/scene_main.cpp

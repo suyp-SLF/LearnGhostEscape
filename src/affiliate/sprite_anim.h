@@ -5,14 +5,15 @@
 
 class SpriteAnim : public Sprite
 {
+protected:
     int _current_frame = 0;
     int _total_frames = 0;
     int _fps = 10;
     float _frame_timer = 0.0f;
     bool _is_loop = true; // default is loop
-
+    bool _is_finish = false;
 public:
-    static SpriteAnim *addSpriteAnimChild(ObjectScreen *parent,const std::string &texture_path, float scale = 1.f);
+    static SpriteAnim *addSpriteAnimChild(ObjectScreen *parent,const std::string &texture_path, Anchor anchor = Anchor::CENTER, float scale = 1.f);
     virtual void update(float dt) override;
     virtual void setTexture(const Texture &texture) override;
 
@@ -25,5 +26,9 @@ public:
     void setFrameTimer(float frame_timer) { _frame_timer = frame_timer; }
     int getCurrentFrame() { return _current_frame; }
     int setCurrentFrame(int current_frame) { _current_frame = current_frame; }
+    bool isLoop() { return _is_loop; }
+    void setIsLoop(bool is_loop) { _is_loop = is_loop; }
+    bool isFinish() { return _is_finish; }
+    void setIsFinish(bool is_finish) { _is_finish = is_finish; }
 };
 #endif // SPRITE_ANIM_H
