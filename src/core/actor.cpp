@@ -9,9 +9,9 @@ void Actor::move(float dt)
     _position = glm::clamp(_position, glm::vec2(0.0f), _game.getCurrentScene()->getWorldSize());
 }
 
-void Actor::isAlive()
+void Actor::getIsAlive()
 {
-    _stats->isAlive();
+    _stats->getIsAlive();
 }
 
 void Actor::isInvisible()

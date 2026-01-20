@@ -5,6 +5,8 @@
 #include "affiliate/sprite_anim.h"
 #include "player.h"
 
+#include <glm/glm.hpp>
+
 class Enemy : public Actor
 {
 private:
@@ -26,6 +28,8 @@ public:
     virtual void update(float dt) override;
     virtual void render() override;
     virtual void clean() override;
+
+    static Enemy* addEnemyChild(Object *parent, glm::vec2 postion, Player *_target);
 
     void attack();
     void aim_target(Player *target);

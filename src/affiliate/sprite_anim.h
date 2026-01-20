@@ -25,10 +25,10 @@ public:
     float getFrameTimer() { return _frame_timer; }
     void setFrameTimer(float frame_timer) { _frame_timer = frame_timer; }
     int getCurrentFrame() { return _current_frame; }
-    int setCurrentFrame(int current_frame) { _current_frame = current_frame; }
+    void setCurrentFrame(int current_frame) { _current_frame = current_frame; }
     bool isLoop() { return _is_loop; }
     void setIsLoop(bool is_loop) { _is_loop = is_loop; }
-    bool isFinish() { return _is_finish; }
-    void setIsFinish(bool is_finish) { _is_finish = is_finish; }
+    bool getIsFinish() { return _is_finish; }
+    void setgetIsFinish(bool is_finish) { _is_finish = is_finish; }
 };
 #endif // SPRITE_ANIM_H

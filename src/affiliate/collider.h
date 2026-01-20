@@ -22,5 +22,6 @@ public:
     // GETTER AND SETTER
     Shape getShape() const { return _shape; }
     void setShape(Shape shape) { _shape = shape; }
+    
 };
 #endif // COLLIDER_H

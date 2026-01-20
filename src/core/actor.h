@@ -28,7 +28,7 @@ public:
     void setStats(Stats* stats) { _stats = stats; };
     Stats* getStats() { return _stats; };
 
-    void isAlive();
+    void getIsAlive();
     void isInvisible();
     void takeDamage(int damage);
 };

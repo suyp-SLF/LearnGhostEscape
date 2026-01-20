@@ -17,7 +17,9 @@ public:
     ObjectScreen *getParent() { return _parent; }
     void setOffset(glm::vec2 offset) { _offset = offset; }
     glm::vec2 getOffset() { return _offset; }
-    void setSize(glm::vec2 size) { _size = size; }
+    void setSize(glm::vec2 size);
     glm::vec2 getSize() { return _size; }
+    void setAnchor(Anchor anchor) { _anchor = anchor; }
+    Anchor getAnchor() { return _anchor; }
 };
 #endif // OBJECT_AFFILIATE_H

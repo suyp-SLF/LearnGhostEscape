@@ -14,7 +14,7 @@ public:
     virtual void update(float dt) override;
 
     // GETTER AND SETTER
-    virtual glm::vec2 getPosition() { return _position; }
+    virtual glm::vec2 getPosition() override { return _position; }
     void setPosition(glm::vec2 position);
     virtual void setRenderPosition(const glm::vec2 render_position) override;
     virtual void setCollider(Collider *collider) { _collider = collider; }

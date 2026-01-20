@@ -3,12 +3,14 @@
 
 #include "core/actor.h"
 #include "affiliate/sprite_anim.h"
+#include "world/effect.h"
 
 class Player : public Actor
 {
 private:
     SpriteAnim *_sprite_idle = nullptr;
     SpriteAnim *_sprite_run = nullptr;
+    Effect *_effect = nullptr;
 public:
     virtual void init() override;
     virtual void handleEvents(SDL_Event &event) override;
@@ -19,5 +21,6 @@ public:
     void keyboardControl();
     void syncCamera();
     void checkState();
+    void checkIsDead();
 };
 #endif // PLAYER_H

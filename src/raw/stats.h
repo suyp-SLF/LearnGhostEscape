@@ -36,7 +36,7 @@ public:
     float getMaxMana() { return _max_mana; }
     float getDamage() { return _damage; }
     float getManaRegen() { return _mana_regen; }
-    bool isAlive() { return _is_alive; }
+    bool getIsAlive() { return _is_alive; }
     Actor *getParent() { return _parent; }
     bool isInvincible() { return _is_invincible; }
 

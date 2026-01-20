@@ -10,7 +10,7 @@ Effect *Effect::addEffectChild(Object *parent, const std::string &file_path, glm
     effect->_anim->setActive(true);
     effect->setPosition(position);
     effect->setNextObject(next_object);
-    parent->addChild(effect);
+    if (parent) parent->addChild(effect);
     return effect;
 }
 
@@ -22,7 +22,7 @@ void Effect::update(float dt)
 
 void Effect::checkFinish()
 {
-    if (_anim->isFinish())
+    if (_anim->getIsFinish())
     {
         _is_delete = true;
         if (_next_object != nullptr)

@@ -9,7 +9,7 @@ void Scene::handleEvents(SDL_Event &event)
     Object::handleEvents(event);
     for (auto &child : _children_screen)
     {
-        if (!child->isActive())
+        if (!child->getIsActive())
             continue;
         child->handleEvents(event);
     }
@@ -27,13 +27,14 @@ void Scene::update(float dt)
     for (auto it = _children_world.begin(); it != _children_world.end();)
     {
         auto child = *it;
-        if (child->isDelete())
+        if (child->getIsDelete())
         {
             it = _children_world.erase(it);
             child->clean();
             delete child;
+            child = nullptr;
         }
-        else if (child->isActive())
+        else if (child->getIsActive())
         {
             (*it)->update(dt);
             ++it;
@@ -46,13 +47,14 @@ void Scene::update(float dt)
     for (auto it = _children_screen.begin(); it != _children_screen.end();)
     {
         auto child = *it;
-        if (child->isDelete())
+        if (child->getIsDelete())
         {
             it = _children_screen.erase(it);
             child->clean();
             delete child;
+            child = nullptr;
         }
-        else if (child->isActive())
+        else if (child->getIsActive())
         {
              (*it)->update(dt);
             ++it;
@@ -71,13 +73,13 @@ void Scene::render()
     Object::render();
     for (auto &child : _children_world)
     {
-        if (!child->isActive())
+        if (!child->getIsActive())
             continue;
         child->render();
     }
     for (auto &child : _children_screen)
     {
-        if (!child->isActive())
+        if (!child->getIsActive())
             continue;
         child->render();
     }
@@ -103,6 +105,7 @@ void Scene::addChild(Object *child)
     switch (child->getType())
     {
     case ObjectType::OBJECT_WORLD:
+    case ObjectType::ENEMY:
         _children_world.push_back(static_cast<ObjectWorld *>(child));
         break;
     case ObjectType::OBJECT_SCREEN:
@@ -118,6 +121,7 @@ void Scene::removeChild(Object *child)
     switch (child->getType())
     {
     case ObjectType::OBJECT_WORLD:
+    case ObjectType::ENEMY:
         _children_world.erase(std::remove(_children_world.begin(), _children_world.end(), static_cast<ObjectWorld *>(child)), _children_world.end());
         break;
     case ObjectType::OBJECT_SCREEN:

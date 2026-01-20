@@ -16,9 +16,9 @@ Collider *Collider::addColliderChild(ObjectScreen *parent, glm::vec2 size, Ancho
 {
     Collider *collider = new Collider();
     collider->init();
+    collider->setAnchor(anchor);
     collider->setParent(parent);
     collider->setSize(size);
-    collider->setOffsetByAnchor(anchor);
     collider->setShape(shape);
     parent->addChild(collider);
     return collider;

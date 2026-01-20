@@ -34,8 +34,8 @@ public:
     ObjectType getType() { return _type; }
     void setType(ObjectType type) { _type = type; }
     void setActive(bool active) { _is_active = active; }
-    bool isActive() { return _is_active; }
+    bool getIsActive() { return _is_active; }
     void setDelete(bool delete_flag) { _is_delete = delete_flag; }
-    bool isDelete() { return _is_delete; }
+    bool getIsDelete() { return _is_delete; }
 };
 #endif // OBJECT_H

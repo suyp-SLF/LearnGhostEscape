@@ -17,7 +17,7 @@ class Sprite : public ObjectAffiliate
 protected:
     Texture _texture;
 public:
-    static Sprite *addSpriteChild(ObjectScreen *parent, const std::string& texture_path, float scale = 1.f);
+    static Sprite *addSpriteChild(ObjectScreen *parent, const std::string& texture_path, float scale = 1.f, Anchor anchor = Anchor::CENTER);
     Sprite() = default;
     void setScale(float scale){ _size *= scale; }
     virtual void render() override;

@@ -12,6 +12,7 @@ void Enemy::init()
     _anim_hurt = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostHurt-Sheet.png", Anchor::CENTER, 2.f);
     _anim_normal->setActive(true);
 
+    _type = ObjectType::ENEMY;
     _current_anim = _anim_normal;
     _collider = Collider::addColliderChild(this, _anim_normal->getSize(), Anchor::CENTER);
     _stats = Stats::addStatsChild(this);
@@ -25,9 +26,12 @@ void Enemy::handleEvents(SDL_Event &event)
 void Enemy::update(float dt)
 {
     Actor::update(dt);
-    aim_target(_target);
-    move(dt);
-    attack();
+    if (_target->getIsActive())
+    {
+        aim_target(_target);
+        move(dt);
+        attack();
+    }
 }
 
 void Enemy::render()
@@ -41,13 +45,24 @@ void Enemy::clean()
     Actor::clean();
 }
 
+Enemy *Enemy::addEnemyChild(Object *parent, glm::vec2 postion, Player *_target)
+{
+    auto enemy = new Enemy();
+    enemy->init();
+    enemy->set_target(_target);
+    enemy->setPosition(postion);
+    if (parent) parent->addChild(enemy);
+    return enemy;
+}
+
 void Enemy::attack()
 {
-    if (!_collider || _target->getCollider() == nullptr)
+    if (!_collider || !_target || _target->getCollider() == nullptr)
         return;
     if (_collider->isColliding(_target->getCollider()))
     {
-        if(_stats && _target->getStats()){
+        if (_stats && _target->getStats())
+        {
             _target->takeDamage(_stats->getDamage());
         }
     }

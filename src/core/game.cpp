@@ -171,6 +171,8 @@ void Game::handleEvents()
 
 void Game::update(float dt)
 {
+    _mouse_button_state = SDL_GetMouseState(&_mouse_position.x, &_mouse_position.y);
+    //更新
     if (_text)
     {
         char buffer[64];

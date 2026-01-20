@@ -1,10 +1,13 @@
 #include "scene_main.h"
 #include "player.h"
 #include "enemy.h"
-#include "world/effect.h"
+#include "spawner.h"
+#include "screen/ui_mouse.h"
 
 void SceneMain::init()
 {
+    SDL_HideCursor();
+
     _world_size = _game.getScreenSize() * 3.0f; // 3 倍于屏幕大小
     _camera_position = _world_size / 2.0f - _game.getScreenSize() / 2.0f;
     _player = new Player();
@@ -12,14 +15,12 @@ void SceneMain::init()
     _player->setPosition(_world_size / 2.0f);
     addChild(_player);
 
-    
+    _spawner = new Spawner();
+    _spawner->init();
+    _spawner->setTarget(_player);
+    addChild(_spawner);
 
-    auto enemy = new Enemy();
-    enemy->init();
-    enemy->set_target(_player);
-    enemy->setPosition(_world_size / 2.0f + glm::vec2(100.0f, 0.0f));
-
-    Effect::addEffectChild(this, "assets/effect/184_3_.png", _world_size / 2.0f + glm::vec2(100.0f, 0.0f), 2.f, enemy); // 添加特效
+    _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER); //添加鼠标
 }
 
 void SceneMain::handleEvents(SDL_Event &event)

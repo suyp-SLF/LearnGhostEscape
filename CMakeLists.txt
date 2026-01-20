@@ -44,9 +44,12 @@ add_executable(
     src/core/scene.cpp
     src/core/asset_store.cpp
 
+    src/screen/ui_mouse.cpp
+
     src/raw/stats.cpp
 
     src/world/effect.cpp
+    src/world/spell.cpp
 
     src/affiliate/sprite.cpp
     src/affiliate/sprite_anim.cpp
@@ -56,6 +59,7 @@ add_executable(
     src/player.cpp
     src/enemy.cpp
     src/scene_main.cpp
+    src/spawner.cpp
     )
 
 # 这样编译器才能进入 /Users/suyp/C++/Library/build/include 找到 SDL3_mixer 文件夹
