@@ -14,10 +14,13 @@ public:
     virtual void update(float dt) override;
 
     //
-    static Spell *addSpellChild(ObjectWorld *parent, const std::string& texture_path, glm::vec2 position, float scale = 1.f, Anchor anchor = Anchor::CENTER);
+    static Spell *addSpellChild(Object *parent, const std::string& texture_path, glm::vec2 position, float damage, float scale = 1.f, Anchor anchor = Anchor::CENTER);
 
     // GETTER AND SETTER
     void setAnim(SpriteAnim *anim) { _anim = anim; };
+    SpriteAnim *getAnim() { return _anim; };
+    void setDamage(float damage) { _damage = damage; };
+    float getDamage() { return _damage; };
 private:
     void attack();
 };

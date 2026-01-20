@@ -16,7 +16,7 @@ void Spawner::update(float dt)
                 _game.getCurrentScene()->getCameraPosition(),
                 _game.getCurrentScene()->getCameraPosition() + _game.getScreenSize());
 
-            Enemy *enemy = Enemy::addEnemyChild(nullptr, position, _target);
+            Enemy *enemy = Enemy::addEnemyChild(_game.getCurrentScene(), position, _target);
             enemy->setActive(true);
 
             Effect::addEffectChild(this, "assets/effect/184_3_.png", position, 2.f, enemy); // 添加特效

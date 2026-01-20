@@ -24,8 +24,8 @@ UIMouse *UIMouse::addUIMouseChild(Object *parent, const std::string &normal1, co
 {
     auto ui_mouse = new UIMouse();
     ui_mouse->init();
-    ui_mouse->_normal1 = Sprite::addSpriteChild(ui_mouse, normal1, 1.f, Anchor::CENTER);
-    ui_mouse->_normal2 = Sprite::addSpriteChild(ui_mouse, normal2, 1.f, Anchor::CENTER);
+    ui_mouse->_normal1 = Sprite::addSpriteChild(ui_mouse, normal1, scale, anchor);
+    ui_mouse->_normal2 = Sprite::addSpriteChild(ui_mouse, normal2, scale, anchor);
     if (parent) parent->addChild(ui_mouse);
     return ui_mouse;
 }

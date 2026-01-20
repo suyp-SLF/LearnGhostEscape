@@ -27,6 +27,8 @@ private:
     TTF_Font *_font = nullptr; // 字体
     TTF_TextEngine *_textEngine = nullptr; // 文字引擎
     TTF_Text *_text = nullptr; // 文字
+
+    TTF_Text *_textVe = nullptr; // 文字
     
     glm::vec2 _mouse_position = glm::vec2(0); // 鼠标位置
     SDL_MouseButtonFlags _mouse_button_state = 0; // 鼠标按键状态
@@ -71,6 +73,7 @@ public:
     AssetStore* getAssetStore() const { return _asset_store; } // 获取资源存储
     glm::vec2 getMousePosition() const { return _mouse_position; }
     SDL_MouseButtonFlags getMouseButtonState() const { return _mouse_button_state; }
+    TTF_Text *getTextVe() const { return _textVe; }
 
     // 随机数
     float randomFloat(float min, float max) { return std::uniform_real_distribution<float>(min, max)(_random_generator);}// 生成一个[min, max)之间的随机浮点数
@@ -85,5 +88,6 @@ public:
     void drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const SDL_FColor color); // 绘制边界
     void drawRect(const RectData& data); // 绘制矩形
     void drawFPS(const glm::vec2 &position, const SDL_FColor color); // 绘制FPS
+    void drawText(const std::string& content, glm::vec2 position, glm::vec4 color = glm::vec4(1.0f));
 };
 #endif // GAME_H

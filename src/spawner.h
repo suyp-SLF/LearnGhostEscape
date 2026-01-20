@@ -11,7 +11,7 @@ protected:
     float _spawn_timer = 0.0f;
     float _spawn_time = 8.f;
 
-    int _spawn_count = 20;
+    int _spawn_count = 5;
 
 public:
     virtual void update(float dt) override;

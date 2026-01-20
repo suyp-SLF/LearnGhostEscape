@@ -9,7 +9,7 @@ SpriteAnim *SpriteAnim::addSpriteAnimChild(ObjectScreen *parent, const std::stri
     sprite_anim->setScale(scale);
     sprite_anim->setActive(false);
     sprite_anim->setOffsetByAnchor(anchor);
-    parent->addChild(sprite_anim);
+    if (parent) parent->addChild(sprite_anim);
     return sprite_anim;
 }
 
@@ -20,6 +20,7 @@ void SpriteAnim::update(float dt)
     if (!_is_loop && (_current_frame == _total_frames))
     {
         _is_finish = true;
+        //_is_delete = true;
         return;
     }
     if (_frame_timer >= 1.0f / _fps)

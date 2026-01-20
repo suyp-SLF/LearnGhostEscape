@@ -143,6 +143,7 @@ void Game::init(std::string title, int width, int height)
         SDL_Log("当前工作目录路径，请确认 assets 文件夹是否在此目录下。");
     }
     _text = TTF_CreateText(_textEngine, _font, "FPS: 60", 0);
+    _textVe = TTF_CreateText(_textEngine, _font, "FPS: 60", 0);
 
     // --创建资源管理器
     _asset_store = new AssetStore(_renderer, _mixer);
@@ -344,4 +345,36 @@ void Game::drawFPS(const glm::vec2 &position, const SDL_FColor color)
 
     // 5. 绘制完后把颜色改回黑色（为了不影响你的 drawGrid 逻辑）
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+}
+void Game::drawText(const std::string& content, glm::vec2 position, glm::vec4 color) {
+    if (!_textEngine || !_font) return;
+
+    // 1. 创建临时文字对象（如果只是偶尔画一下）
+    // 注意：如果是 FPS 这种每帧都在变的，建议像你之前那样使用成员变量 _text 以复用内存
+    TTF_Text* tempText = TTF_CreateText(_textEngine, _font, content.c_str(), content.length());
+    if (!tempText) return;
+
+    // 2. 保存旧的混合模式和颜色 (SDL3 最佳实践)
+    SDL_BlendMode oldMode;
+    SDL_GetRenderDrawBlendMode(_renderer, &oldMode);
+    Uint8 oldR, oldG, oldB, oldA;
+    SDL_GetRenderDrawColor(_renderer, &oldR, &oldG, &oldB, &oldA);
+
+    // 3. 设置绘制环境
+    // 关键点：DrawColor 必须是白色，文字才不会变暗或消失
+    SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
+    
+    // 设置文字本身的颜色
+    TTF_SetTextColor(tempText, 
+        (Uint8)(color.r * 255), (Uint8)(color.g * 255), 
+        (Uint8)(color.b * 255), (Uint8)(color.a * 255));
+
+    // 4. 绘制
+    TTF_DrawRendererText(tempText, position.x, position.y);
+
+    // 5. 还原环境并释放
+    SDL_SetRenderDrawColor(_renderer, oldR, oldG, oldB, oldA);
+    SDL_SetRenderDrawBlendMode(_renderer, oldMode);
+    TTF_DestroyText(tempText);
 }

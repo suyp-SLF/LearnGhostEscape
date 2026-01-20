@@ -2,6 +2,7 @@
 #include "../core/scene.h"
 #include "../enemy.h"
 #include "../affiliate/sprite_anim.h"
+#include "../affiliate/collider.h"
 
 void Spell::update(float dt)
 {
@@ -13,11 +14,15 @@ void Spell::update(float dt)
     attack();
 }
 
-Spell *Spell::addSpellChild(ObjectWorld *parent, const std::string &texture_path, glm::vec2 position, float scale, Anchor anchor)
+Spell *Spell::addSpellChild(Object *parent, const std::string &texture_path, glm::vec2 position, float damage, float scale, Anchor anchor)
 {
     auto spell = new Spell();
     spell->init();
+    spell->setDamage(damage);
     spell->_anim = SpriteAnim::addSpriteAnimChild(spell, texture_path, anchor, scale);
+    spell->_anim->setActive(true);
+    auto size = spell->_anim->getSize();
+    spell->_collider = Collider::addColliderChild(spell, size, Anchor::CENTER, Collider::Shape::CIRCLE);
     spell->_anim->setIsLoop(false);
     spell->setPosition(position);
     if (parent) parent->addChild(spell);

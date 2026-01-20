@@ -5,7 +5,7 @@ Effect *Effect::addEffectChild(Object *parent, const std::string &file_path, glm
 {
     auto effect = new Effect();
     effect->init();
-    effect->setAnim(SpriteAnim::addSpriteAnimChild(effect, file_path, Anchor::CENTER, scale));
+    effect->setAnim(SpriteAnim::addSpriteAnimChild(nullptr, file_path, Anchor::CENTER, scale));
     effect->_anim->setIsLoop(false);
     effect->_anim->setActive(true);
     effect->setPosition(position);

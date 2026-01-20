@@ -35,6 +35,7 @@ public:
     void aim_target(Player *target);
     void checkState();
     void changeState(State new_state);
+    void remove();
 
     // GETTER AND SETTER
     Player *get_target() const { return _target; }

@@ -9,6 +9,7 @@ void Enemy::init()
     Actor::init();
     _anim_normal = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-Sheet.png", Anchor::CENTER, 2.f);
     _anim_die = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostDead-Sheet.png", Anchor::CENTER, 2.f);
+    _anim_die->setIsLoop(false);
     _anim_hurt = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostHurt-Sheet.png", Anchor::CENTER, 2.f);
     _anim_normal->setActive(true);
 
@@ -26,12 +27,14 @@ void Enemy::handleEvents(SDL_Event &event)
 void Enemy::update(float dt)
 {
     Actor::update(dt);
-    if (_target->getIsActive())
+    if (_target->getIsActive() && _current_state != State::DIE)
     {
         aim_target(_target);
         move(dt);
         attack();
     }
+    checkState();
+    remove();
 }
 
 void Enemy::render()
@@ -79,6 +82,23 @@ void Enemy::aim_target(Player *target)
 
 void Enemy::checkState()
 {
+    State new_state;
+    if (_stats->getHealth() <= 0)
+    {
+        new_state = State::DIE;
+    }
+    else if (_stats->getHealth() < _stats->getMaxHealth())
+    {
+        new_state = State::HURT;
+    }
+    else
+    {
+        new_state = State::NORMAL;
+    }
+    if (new_state != _current_state)
+    {
+        changeState(new_state);
+    }
 }
 
 void Enemy::changeState(State new_state)
@@ -102,4 +122,11 @@ void Enemy::changeState(State new_state)
         break;
     }
     _current_state = new_state;
+}
+
+void Enemy::remove()
+{
+    if(_anim_die->getIsFinish()){
+        _is_delete = true;
+    }
 }

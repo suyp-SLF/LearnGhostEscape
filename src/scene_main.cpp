@@ -3,6 +3,7 @@
 #include "enemy.h"
 #include "spawner.h"
 #include "screen/ui_mouse.h"
+#include "world/spell.h"
 
 void SceneMain::init()
 {
@@ -25,7 +26,14 @@ void SceneMain::init()
 
 void SceneMain::handleEvents(SDL_Event &event)
 {
-    Scene::handleEvents(event); //父类update
+    Scene::handleEvents(event); //父类
+    if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+    {
+        if (event.button.button == SDL_BUTTON_LEFT)
+        {
+            Spell::addSpellChild(this, "assets/effect/Thunderstrike w blur.png", screenToWorld(_game.getMousePosition()), 90.f, 3.f, Anchor::CENTER);
+        }
+    }
 }
 
 void SceneMain::update(float dt)

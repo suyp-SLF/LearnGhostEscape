@@ -21,6 +21,12 @@ void Scene::handleEvents(SDL_Event &event)
 
 void Scene::update(float dt)
 {
+    for (auto &child : _children_wait_to_add)
+    {
+        addChild(child);
+    }
+    _children_wait_to_add.clear();
+    //更新
     if (!_is_active)
         return;
     Object::update(dt);
@@ -68,6 +74,8 @@ void Scene::update(float dt)
 
 void Scene::render()
 {
+    _game.drawText("Children:" + std::to_string(_children.size()) + " World:" + std::to_string(_children_world.size()) + " Screen:" + std::to_string(_children_screen.size()),
+         glm::vec2(10.0f, 40.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
     if (!_is_active)
         return;
     Object::render();
@@ -110,6 +118,7 @@ void Scene::addChild(Object *child)
         break;
     case ObjectType::OBJECT_SCREEN:
         _children_screen.push_back(static_cast<ObjectScreen *>(child));
+        break;
     default:
         _children.push_back(child);
         break;
@@ -126,7 +135,7 @@ void Scene::removeChild(Object *child)
         break;
     case ObjectType::OBJECT_SCREEN:
         _children_screen.erase(std::remove(_children_screen.begin(), _children_screen.end(), static_cast<ObjectScreen *>(child)), _children_screen.end());
-
+        break;
     default:
         _children.erase(std::remove(_children.begin(), _children.end(), child), _children.end());
         break;
