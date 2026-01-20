@@ -31,8 +31,8 @@ public:
     virtual void removeChild(Object *child) { _children.erase(std::remove(_children.begin(), _children.end(), child), _children.end()); }
 
     // --GETTER AND SETTER
-    ObjectType getType() { return _type; }
-    void setType(ObjectType type) { _type = type; }
+    ObjectType getObjectType() { return _type; }
+    void setObjectType(ObjectType type) { _type = type; }
     void setActive(bool active) { _is_active = active; }
     bool getIsActive() { return _is_active; }
     void setDelete(bool delete_flag) { _is_delete = delete_flag; }

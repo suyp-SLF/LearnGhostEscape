@@ -102,7 +102,7 @@ void Scene::clean()
 
 void Scene::addChild(Object *child)
 {
-    switch (child->getType())
+    switch (child->getObjectType())
     {
     case ObjectType::OBJECT_WORLD:
     case ObjectType::ENEMY:
@@ -118,7 +118,7 @@ void Scene::addChild(Object *child)
 
 void Scene::removeChild(Object *child)
 {
-    switch (child->getType())
+    switch (child->getObjectType())
     {
     case ObjectType::OBJECT_WORLD:
     case ObjectType::ENEMY:

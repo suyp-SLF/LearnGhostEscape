@@ -40,6 +40,9 @@ public:
     // --世界大小--
     glm::vec2 getWorldSize() const { return _world_size; }
     void setWorldSize(const glm::vec2 world_size) { _world_size = world_size; }
+
+    std::vector<ObjectWorld*>& getChildrenWorld() { return _children_world; }
+    std::vector<ObjectScreen*>& getChildrenScreen() { return _children_screen; }
 };
 
 #endif // SCENE_H

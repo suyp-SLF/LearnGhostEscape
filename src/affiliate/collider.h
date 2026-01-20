@@ -3,9 +3,12 @@
 
 #include "../core/object_affiliate.h"
 
+class Spell;
 class Collider : public ObjectAffiliate
 {
-private:
+protected:
+    // 友元
+    friend Spell;
     enum class Shape
     {
         CIRCLE,
