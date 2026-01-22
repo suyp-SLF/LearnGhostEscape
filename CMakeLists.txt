@@ -47,6 +47,7 @@ add_executable(
     src/screen/ui_mouse.cpp
 
     src/raw/stats.cpp
+    src/raw/weapon.cpp
 
     src/world/effect.cpp
     src/world/spell.cpp
@@ -60,6 +61,7 @@ add_executable(
     src/enemy.cpp
     src/scene_main.cpp
     src/spawner.cpp
+    src/weapon_thunder.cpp
     )
 
 # 这样编译器才能进入 /Users/suyp/C++/Library/build/include 找到 SDL3_mixer 文件夹

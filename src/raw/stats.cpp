@@ -48,7 +48,6 @@ void Stats::takeDamage(float damage)
         _health = 0;
         _is_alive = false;
     }
-    SDL_Log("Health: %f", _health);
     _is_invincible = true;
     _invincible_timer = 0.f;
 }
