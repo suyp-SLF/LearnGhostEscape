@@ -15,6 +15,7 @@ protected:
 public:
     static SpriteAnim *addSpriteAnimChild(ObjectScreen *parent,const std::string &texture_path, Anchor anchor = Anchor::CENTER, float scale = 1.f);
     virtual void update(float dt) override;
+    virtual void render() override;
     virtual void setTexture(const Texture &texture) override;
 
     // GETTER AND SETTER

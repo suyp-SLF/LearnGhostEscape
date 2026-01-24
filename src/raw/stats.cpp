@@ -32,6 +32,11 @@ bool Stats::canUseMana(float mana_cost)
     return _mana >= mana_cost;
 }
 
+void Stats::useMana(float mana_cost)
+{
+    _mana -= mana_cost;
+}
+
 void Stats::regenMana(float dt)
 {
     _mana += _mana_regen * dt;

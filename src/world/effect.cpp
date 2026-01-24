@@ -1,16 +1,17 @@
 #include "effect.h"
 #include "../core/scene.h"
+#include "../core/scene.h"
 
 Effect *Effect::addEffectChild(Object *parent, const std::string &file_path, glm::vec2 position, float scale, ObjectWorld *next_object)
 {
     auto effect = new Effect();
     effect->init();
-    effect->setAnim(SpriteAnim::addSpriteAnimChild(nullptr, file_path, Anchor::CENTER, scale));
+    effect->setAnim(SpriteAnim::addSpriteAnimChild(effect, file_path, Anchor::CENTER, scale));
     effect->_anim->setIsLoop(false);
     effect->_anim->setActive(true);
     effect->setPosition(position);
     effect->setNextObject(next_object);
-    if (parent) parent->addChild(effect);
+    if (parent) parent->safeAddChild(effect);
     return effect;
 }
 

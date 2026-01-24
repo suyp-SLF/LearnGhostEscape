@@ -25,10 +25,6 @@ void Object::update(float dt)
     for (auto it = _children.begin(); it != _children.end();)
     {
         auto child = *it;
-        #ifdef DEBUG_MODE
-        // 判断是否为空指针
-        SDL_Log("Object::update() child: %p", child);
-        #endif
         if (child->_is_delete)
         {
             it = _children.erase(it);

@@ -173,7 +173,7 @@ void Game::handleEvents()
 void Game::update(float dt)
 {
     _mouse_button_state = SDL_GetMouseState(&_mouse_position.x, &_mouse_position.y);
-    //更新
+    // 更新
     if (_text)
     {
         char buffer[64];
@@ -206,7 +206,7 @@ void Game::clean()
         delete _current_scene;
         _current_scene = nullptr;
     }
-    //清理资源管理器
+    // 清理资源管理器
     if (_asset_store)
     {
         _asset_store->clean();
@@ -255,14 +255,13 @@ void Game::drawImage(const Texture &texture, const glm::vec2 &position, const gl
 
     // 3. 执行绘制
     SDL_RenderTextureRotated(
-        _renderer, 
-        texture.texture, 
-        &texture.src_rect, 
-        &dst_rect, 
-        texture.angle, 
-        nullptr, 
-        texture.flip
-    );
+        _renderer,
+        texture.texture,
+        &texture.src_rect,
+        &dst_rect,
+        texture.angle,
+        nullptr,
+        texture.flip);
 
     // 4. 恢复透明度为不透明（防止同一个纹理在其他地方绘制时变透明）
     SDL_SetTextureAlphaMod(texture.texture, 255);
@@ -296,25 +295,28 @@ void Game::drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right
     }
     SDL_SetRenderDrawColorFloat(_renderer, 0, 0, 0, 1);
 }
-void Game::drawRect(const RectData& data) {
+void Game::drawRect(const RectData &data)
+{
     // 1. 设置颜色 (GLM float 转 SDL Uint8)
-    SDL_SetRenderDrawColor(_renderer, 
-        static_cast<Uint8>(data.color.r * 255), 
-        static_cast<Uint8>(data.color.g * 255), 
-        static_cast<Uint8>(data.color.b * 255), 
-        static_cast<Uint8>(data.color.a * 255)
-    );
+    SDL_SetRenderDrawColor(_renderer,
+                           static_cast<Uint8>(data.color.r * 255),
+                           static_cast<Uint8>(data.color.g * 255),
+                           static_cast<Uint8>(data.color.b * 255),
+                           static_cast<Uint8>(data.color.a * 255));
 
     // 2. 开启混合模式
     SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
 
     // 3. 构建 SDL 矩形
-    SDL_FRect rect = { data.position.x, data.position.y, data.size.x, data.size.y };
+    SDL_FRect rect = {data.position.x, data.position.y, data.size.x, data.size.y};
 
     // 4. 绘制逻辑
-    if (data.filled) {
+    if (data.filled)
+    {
         SDL_RenderFillRect(_renderer, &rect);
-    } else {
+    }
+    else
+    {
         SDL_RenderRect(_renderer, &rect); // 画空心描边
     }
 }
@@ -346,13 +348,16 @@ void Game::drawFPS(const glm::vec2 &position, const SDL_FColor color)
     // 5. 绘制完后把颜色改回黑色（为了不影响你的 drawGrid 逻辑）
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 }
-void Game::drawText(const std::string& content, glm::vec2 position, glm::vec4 color) {
-    if (!_textEngine || !_font) return;
+void Game::drawText(const std::string &content, glm::vec2 position, glm::vec4 color)
+{
+    if (!_textEngine || !_font)
+        return;
 
     // 1. 创建临时文字对象（如果只是偶尔画一下）
     // 注意：如果是 FPS 这种每帧都在变的，建议像你之前那样使用成员变量 _text 以复用内存
-    TTF_Text* tempText = TTF_CreateText(_textEngine, _font, content.c_str(), content.length());
-    if (!tempText) return;
+    TTF_Text *tempText = TTF_CreateText(_textEngine, _font, content.c_str(), content.length());
+    if (!tempText)
+        return;
 
     // 2. 保存旧的混合模式和颜色 (SDL3 最佳实践)
     SDL_BlendMode oldMode;
@@ -364,11 +369,11 @@ void Game::drawText(const std::string& content, glm::vec2 position, glm::vec4 co
     // 关键点：DrawColor 必须是白色，文字才不会变暗或消失
     SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
     SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
-    
+
     // 设置文字本身的颜色
-    TTF_SetTextColor(tempText, 
-        (Uint8)(color.r * 255), (Uint8)(color.g * 255), 
-        (Uint8)(color.b * 255), (Uint8)(color.a * 255));
+    TTF_SetTextColor(tempText,
+                     (Uint8)(color.r * 255), (Uint8)(color.g * 255),
+                     (Uint8)(color.b * 255), (Uint8)(color.a * 255));
 
     // 4. 绘制
     TTF_DrawRendererText(tempText, position.x, position.y);
@@ -377,4 +382,30 @@ void Game::drawText(const std::string& content, glm::vec2 position, glm::vec4 co
     SDL_SetRenderDrawColor(_renderer, oldR, oldG, oldB, oldA);
     SDL_SetRenderDrawBlendMode(_renderer, oldMode);
     TTF_DestroyText(tempText);
+}
+
+void Game::drawHBar(const glm::vec2 &position, const glm::vec2 &size, float value, const glm::vec4 color)
+{
+    // 1. 设置颜色 (GLM float 转 SDL Uint8)
+    SDL_SetRenderDrawColor(_renderer,
+                           static_cast<Uint8>(color.r * 255),
+                           static_cast<Uint8>(color.g * 255),
+                           static_cast<Uint8>(color.b * 255),
+                           static_cast<Uint8>(color.a * 255));
+    SDL_FRect boundary_rect = {
+        position.x,
+        position.y,
+        size.x,
+        size.y};
+    SDL_FRect fill_rect = {
+        position.x,
+        position.y,
+        size.x * value,
+        size.y};
+    // 2. 开启混合模式
+    SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderFillRect(_renderer, &boundary_rect);
+    SDL_RenderRect(_renderer, &fill_rect); // 画空心描边
+    // 绘制完后把颜色改回黑色
+    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 }

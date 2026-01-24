@@ -2,6 +2,7 @@
 #define ACTOR_H
 
 #include "object_world.h"
+#include "../affiliate/affiliate_bar.h"
 
 class Stats;
 class Actor : public ObjectWorld
@@ -9,6 +10,7 @@ class Actor : public ObjectWorld
 
 protected:
     Stats* _stats = nullptr;
+    AffiliateBar* _health_bar = nullptr;
     glm::vec2 _velocity = glm::vec2(0);
     float _max_speed = 100;
 
@@ -16,8 +18,9 @@ protected:
     bool _is_invisible = false;
     
 public:
-    void move(float dt);
+    virtual void update(float dt) override;
 
+    void move(float dt);
     // getter and setter
     void setVelocity(glm::vec2 velocity) { _velocity = velocity; };
     glm::vec2 getVelocity() { return _velocity; };
@@ -28,8 +31,13 @@ public:
     void setStats(Stats* stats) { _stats = stats; };
     Stats* getStats() { return _stats; };
 
+    void setHealthBar(AffiliateBar* health_bar) { _health_bar = health_bar; };
+    AffiliateBar* getHealthBar() { return _health_bar; };
+
     void getIsAlive();
     void isInvisible();
     void takeDamage(int damage);
+private:
+    void updateHealthBar();
 };
 #endif // ACTOR_H

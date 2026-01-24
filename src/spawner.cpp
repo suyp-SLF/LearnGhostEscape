@@ -9,17 +9,15 @@ void Spawner::update(float dt)
     if (_spawn_timer >= _spawn_time)
     {
         _spawn_timer = 0.0f;
-        // Spawn a new enemy
+        SDL_Log("Spawner: spawn enemies");
         for (int i = 0; i < _spawn_count; i++)
         {
             auto position = _game.randomVec2(
                 _game.getCurrentScene()->getCameraPosition(),
                 _game.getCurrentScene()->getCameraPosition() + _game.getScreenSize());
+            Enemy *enemy = Enemy::addEnemyChild(nullptr, position, _target);
 
-            Enemy *enemy = Enemy::addEnemyChild(_game.getCurrentScene(), position, _target);
-            enemy->setActive(true);
-
-            Effect::addEffectChild(this, "assets/effect/184_3_.png", position, 2.f, enemy); // 添加特效
+            Effect::addEffectChild(_game.getCurrentScene(), "assets/effect/184_3_.png", position, 1.f, enemy); // 添加特效
         }
     }
 }

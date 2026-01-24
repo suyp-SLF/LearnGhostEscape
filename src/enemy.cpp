@@ -10,12 +10,15 @@ void Enemy::init()
     _anim_normal = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-Sheet.png", Anchor::CENTER, 2.f);
     _anim_die = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostDead-Sheet.png", Anchor::CENTER, 2.f);
     _anim_die->setIsLoop(false);
+    _anim_die->setActive(false);
     _anim_hurt = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghostHurt-Sheet.png", Anchor::CENTER, 2.f);
-    _anim_normal->setActive(true);
+    _anim_hurt->setActive(false);
 
     _type = ObjectType::ENEMY;
     _current_anim = _anim_normal;
     _collider = Collider::addColliderChild(this, _anim_normal->getSize(), Anchor::CENTER);
+
+    _health_bar = AffiliateBar::addAffiliateBarChild(this, glm::vec2(100.0f, 10.0f), Anchor::BOTTOM_CENTER);
     _stats = Stats::addStatsChild(this);
 }
 
@@ -54,7 +57,7 @@ Enemy *Enemy::addEnemyChild(Object *parent, glm::vec2 postion, Player *_target)
     enemy->init();
     enemy->set_target(_target);
     enemy->setPosition(postion);
-    if (parent) parent->addChild(enemy);
+    if (parent) parent->safeAddChild(enemy);
     return enemy;
 }
 

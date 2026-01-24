@@ -55,6 +55,7 @@ add_executable(
     src/affiliate/sprite.cpp
     src/affiliate/sprite_anim.cpp
     src/affiliate/collider.cpp
+    src/affiliate/affiliate_bar.cpp
     
     src/main.cpp
     src/player.cpp

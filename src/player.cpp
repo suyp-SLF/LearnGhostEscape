@@ -11,11 +11,12 @@ void Player::init()
     _max_speed = 500;
     _sprite_idle = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-idle.png", Anchor::CENTER, 2.f);
     _sprite_run = SpriteAnim::addSpriteAnimChild(this, "assets/sprite/ghost-move.png", Anchor::CENTER, 2.1f);
-    _sprite_idle->setActive(true);
+    _sprite_run->setActive(true);
 
     _collider = Collider::addColliderChild(this, _sprite_idle->getSize() / 2.f, Anchor::CENTER);
     _stats = Stats::addStatsChild(this);
     _effect = Effect::addEffectChild(nullptr, "assets/effect/1764.png", glm::vec2(0), 1.0f);
+    _weapon_thunder = WeaponThunder::addWeaponThunderChild(this, 2.f, 40.f);
 }
 
 void Player::handleEvents(SDL_Event &event)

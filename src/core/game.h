@@ -89,5 +89,6 @@ public:
     void drawRect(const RectData& data); // 绘制矩形
     void drawFPS(const glm::vec2 &position, const SDL_FColor color); // 绘制FPS
     void drawText(const std::string& content, glm::vec2 position, glm::vec4 color = glm::vec4(1.0f));
+    void drawHBar(const glm::vec2 &position, const glm::vec2 &size, float value, const glm::vec4 color); // 绘制水平进度条
 };
 #endif // GAME_H

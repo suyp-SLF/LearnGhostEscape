@@ -6,67 +6,43 @@ void Scene::handleEvents(SDL_Event &event)
 {
     if (!_is_active)
         return;
+
+    // 1. 基类处理（处理 _children 列表）
+    // 这一步会通过递归，自动分发事件给所有子节点（包括 World 和 Screen 对象）
     Object::handleEvents(event);
-    for (auto &child : _children_screen)
-    {
-        if (!child->getIsActive())
-            continue;
-        child->handleEvents(event);
-    }
-    for (auto &child : _children_world)
-    {
-        child->handleEvents(event);
-    }
+
+    // 2. 【彻底删除】 原本这里的 _children_world 循环
+    // 理由：对象已经在 Object::handleEvents 中处理过了。
+    // 如果再跑一遍，不仅性能浪费，还会因为 update 删除了对象而导致野指针崩溃。
 }
 
 void Scene::update(float dt)
 {
-    for (auto &child : _children_wait_to_add)
-    {
-        addChild(child);
-    }
+    // 1. 同步待添加列表
+    for (auto &child : _children_wait_to_add) { addChild(child); }
     _children_wait_to_add.clear();
-    //更新
-    if (!_is_active)
-        return;
-    Object::update(dt);
-    for (auto it = _children_world.begin(); it != _children_world.end();)
-    {
-        auto child = *it;
-        if (child->getIsDelete())
-        {
-            it = _children_world.erase(it);
-            child->clean();
-            delete child;
-            child = nullptr;
-        }
-        else if (child->getIsActive())
-        {
-            (*it)->update(dt);
-            ++it;
-        }
-        else
-        {
+
+    if (!_is_active) return;
+
+    // 2. 关键：只调用一次基类 update。
+    // 这会处理所有子节点的逻辑，并安全地 delete 掉标记为 _is_delete 的对象。
+    Object::update(dt); 
+
+    // 3. 同步 Scene 自己的辅助列表
+    // 注意：这里只负责从分类容器里移除指针，绝对不能调用 delete！
+    for (auto it = _children_world.begin(); it != _children_world.end(); ) {
+        if ((*it)->getIsDelete()) {
+            it = _children_world.erase(it); // 仅仅是移除索引
+        } else {
+            // 这里也不要再调 update 了，因为 Object::update 已经调过了
             ++it;
         }
     }
-    for (auto it = _children_screen.begin(); it != _children_screen.end();)
-    {
-        auto child = *it;
-        if (child->getIsDelete())
-        {
-            it = _children_screen.erase(it);
-            child->clean();
-            delete child;
-            child = nullptr;
-        }
-        else if (child->getIsActive())
-        {
-             (*it)->update(dt);
-            ++it;
-        }
-        else
-        {
+    for (auto it = _children_screen.begin(); it != _children_screen.end(); ) {
+        if ((*it)->getIsDelete()) {
+            it = _children_screen.erase(it); // 仅仅是移除索引
+        } else {
+            // 这里也不要再调 update 了，因为 Object::update 已经调过了
             ++it;
         }
     }
@@ -74,42 +50,46 @@ void Scene::update(float dt)
 
 void Scene::render()
 {
-    _game.drawText("Children:" + std::to_string(_children.size()) + " World:" + std::to_string(_children_world.size()) + " Screen:" + std::to_string(_children_screen.size()),
-         glm::vec2(10.0f, 40.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
-    if (!_is_active)
-        return;
+    // 打印调试信息
+    _game.drawText("Children:" + std::to_string(_children.size()) + 
+                   " World:" + std::to_string(_children_world.size()) + 
+                   " Screen:" + std::to_string(_children_screen.size()),
+                   glm::vec2(10.0f, 40.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+
+    if (!_is_active) return;
+
+    // 只需要这一行！
+    // Object::render 会递归绘制 _children 里的所有东西（Player, Enemy, Spell...）
     Object::render();
-    for (auto &child : _children_world)
-    {
-        if (!child->getIsActive())
-            continue;
-        child->render();
-    }
-    for (auto &child : _children_screen)
-    {
-        if (!child->getIsActive())
-            continue;
-        child->render();
-    }
+
+    // --- 彻底删除下面这两段手动遍历绘制的代码 ---
+    /*
+    for (auto &child : _children_world) { child->render(); } // ❌ 删掉，这里是野指针高发区
+    for (auto &child : _children_screen) { child->render(); } // ❌ 删掉
+    */
 }
 
 void Scene::clean()
 {
-    Object::clean();
+    Object::clean(); // 这里已经删除了所有子节点内存！
+
+    // 下面这些循环会访问已经被 delete 的内存！
     for (auto &child : _children_world)
     {
-        child->clean();
+        // child->clean(); // ❌ 报错：child 已经是野指针
     }
     _children_world.clear();
-    for (auto &child : _children_screen)
-    {
-        child->clean();
-    }
-    _children_screen.clear();
 }
 
 void Scene::addChild(Object *child)
 {
+    if (!child)
+        return;
+
+    // --- 关键修改：所有对象必须进入基类列表 ---
+    // 这样 Object::handleEvents(event) 才能递归找到它们
+    _children.push_back(child);
+
     switch (child->getObjectType())
     {
     case ObjectType::OBJECT_WORLD:
@@ -118,9 +98,6 @@ void Scene::addChild(Object *child)
         break;
     case ObjectType::OBJECT_SCREEN:
         _children_screen.push_back(static_cast<ObjectScreen *>(child));
-        break;
-    default:
-        _children.push_back(child);
         break;
     }
 }

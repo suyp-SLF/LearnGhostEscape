@@ -25,20 +25,38 @@ Spell *Spell::addSpellChild(Object *parent, const std::string &texture_path, glm
     spell->_collider = Collider::addColliderChild(spell, size, Anchor::CENTER, Collider::Shape::CIRCLE);
     spell->_anim->setIsLoop(false);
     spell->setPosition(position);
-    if (parent) parent->addChild(spell);
+    if (parent) parent->safeAddChild(spell);
     return spell;
 }
 
 void Spell::attack()
 {
-    auto objects = _game.getCurrentScene()->getChildrenWorld();
+    // 1. 如果法术自己已经标记删除，直接跳过逻辑
+    if (this->getIsDelete()) return;
+
+    auto scene = _game.getCurrentScene();
+    if (!scene) return;
+
+    auto& objects = scene->getChildrenWorld();
     for (auto object : objects)
     {
-        if (object->getObjectType() == ObjectType::ENEMY && _collider && object->getCollider() && _collider->isColliding(object->getCollider()))
+        // 2. 关键检查：指针不为空 且 对象未被标记删除
+        if (object == nullptr || object->getIsDelete()) {
+            continue;
+        }
+
+        // 3. 确保是敌人且碰撞体有效
+        if (object->getObjectType() == ObjectType::ENEMY)
         {
-            //  强转object为Enemy
-            auto enemy = dynamic_cast<Enemy *>(object);
-            enemy->takeDamage(_damage);
+            auto enemyCollider = object->getCollider();
+            if (_collider && enemyCollider && _collider->isColliding(enemyCollider))
+            {
+                auto enemy = dynamic_cast<Enemy *>(object);
+                if (enemy) 
+                {
+                    enemy->takeDamage(_damage);
+                }
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ Collider *Collider::addColliderChild(ObjectScreen *parent, glm::vec2 size, Ancho
     collider->setParent(parent);
     collider->setSize(size);
     collider->setShape(shape);
-    parent->addChild(collider);
+    parent->safeAddChild(collider);
     return collider;
 }
 
