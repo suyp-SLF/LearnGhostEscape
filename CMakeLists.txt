@@ -45,6 +45,7 @@ add_executable(
     src/core/asset_store.cpp
 
     src/screen/ui_mouse.cpp
+    src/screen/hud_stats.cpp
 
     src/raw/stats.cpp
     src/raw/weapon.cpp

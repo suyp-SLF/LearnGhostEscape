@@ -4,6 +4,7 @@
 #include "spawner.h"
 #include "screen/ui_mouse.h"
 #include "world/spell.h"
+#include "screen/hud_stats.h"
 
 void SceneMain::init()
 {
@@ -21,28 +22,29 @@ void SceneMain::init()
     _spawner->setTarget(_player);
     addChild(_spawner);
 
-    _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER); //添加鼠标
+    _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER); // 添加鼠标
+    _hud_stats = HUDStats::addHudStatsChild(this, _player, glm::vec2(30.f));                                 // 添加血条
 }
 
 void SceneMain::handleEvents(SDL_Event &event)
 {
-    Scene::handleEvents(event); //父类
+    Scene::handleEvents(event); // 父类
 }
 
 void SceneMain::update(float dt)
 {
-    Scene::update(dt);  //父类update
+    Scene::update(dt); // 父类update
 }
 
 void SceneMain::render()
 {
     renderBackground();
-    Scene::render();    //父类render
+    Scene::render(); // 父类render
 }
 
 void SceneMain::clean()
 {
-    Scene::clean(); //父类clean
+    Scene::clean(); // 父类clean
 }
 
 void SceneMain::renderBackground()

@@ -238,7 +238,7 @@ void Game::clean()
     // SDL3销毁SDL
     SDL_Quit();
 }
-void Game::drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, float alpha)
+void Game::drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask, float alpha)
 {
     // 1. 设置混合模式（必须开启混合模式，Alpha 才会生效）
     SDL_SetTextureBlendMode(texture.texture, SDL_BLENDMODE_BLEND);
@@ -247,17 +247,24 @@ void Game::drawImage(const Texture &texture, const glm::vec2 &position, const gl
     Uint8 alpha_val = static_cast<Uint8>(alpha * 255.0f);
     SDL_SetTextureAlphaMod(texture.texture, alpha_val);
 
+    SDL_FRect src_rect = {
+        texture.src_rect.x,
+        texture.src_rect.y,
+        texture.src_rect.w * mask.x,
+        texture.src_rect.h * mask.y
+    };
+
     SDL_FRect dst_rect = {
         position.x,
         position.y,
-        size.x,
-        size.y};
+        size.x * mask.x,
+        size.y * mask.y};
 
     // 3. 执行绘制
     SDL_RenderTextureRotated(
         _renderer,
         texture.texture,
-        &texture.src_rect,
+        &src_rect,
         &dst_rect,
         texture.angle,
         nullptr,
@@ -404,8 +411,8 @@ void Game::drawHBar(const glm::vec2 &position, const glm::vec2 &size, float valu
         size.y};
     // 2. 开启混合模式
     SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
-    SDL_RenderFillRect(_renderer, &boundary_rect);
-    SDL_RenderRect(_renderer, &fill_rect); // 画空心描边
+    SDL_RenderFillRect(_renderer, &fill_rect);
+    SDL_RenderRect(_renderer, &boundary_rect); // 画空心描边
     // 绘制完后把颜色改回黑色
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 }

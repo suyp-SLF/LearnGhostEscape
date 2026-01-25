@@ -25,7 +25,7 @@ void WeaponThunder::handleEvents(SDL_Event &event)
             if (canAttack())
             {
                 Scene *scene = _game.getCurrentScene();
-                auto spell = Spell::addSpellChild(scene, "assets/effect/Thunderstrike w blur.png", scene->screenToWorld(_game.getMousePosition()), 90.f, 3.f, Anchor::CENTER);
+                auto spell = Spell::addSpellChild(scene, "assets/effect/Thunderstrike w blur.png", scene->screenToWorld(_game.getMousePosition()), 40.f, 3.f, Anchor::CENTER);
             }
         }
     }

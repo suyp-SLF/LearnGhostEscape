@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 
+class HUDStats;
 class UIMouse;
 class Player;
 class Spawner;
@@ -15,7 +16,7 @@ private:
     Player *_player = nullptr;  // 玩家
     Spawner *_spawner = nullptr;    // 敌人生成器
     UIMouse *_ui_mouse = nullptr;   // 鼠标
-
+    HUDStats *_hud_stats = nullptr; // 状态栏
 public:
     SceneMain() = default;
     virtual ~SceneMain() = default;
