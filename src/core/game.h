@@ -82,6 +82,7 @@ public:
     glm::ivec2 randomIvec2(glm::ivec2 min, glm::ivec2 max) { return glm::ivec2(randowInt(min.x, max.x), randowInt(min.y, max.y)); } // 生成一个[min, max)之间的随机二维整数向量
 
     // 渲染图片
+    void drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask, float alpha, glm::vec3 color);
     void drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask = glm::vec2(1.f), float alpha = 1.f);    // 绘制图片
     // 工具类,用于绘制网格,offset_x和offset_y为网格的偏移量
     void drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float cell_size, const glm::vec2 offset, const SDL_FColor color); // 绘制网格

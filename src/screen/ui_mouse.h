@@ -15,7 +15,7 @@ protected:
 
 public:
     virtual void update(float dt) override;
-
+    virtual void render() override;
     //
     static UIMouse *addUIMouseChild(Object *parent, const std::string &normal1, const std::string &normal2, float scale = 1.f, Anchor anchor = Anchor::CENTER);
 

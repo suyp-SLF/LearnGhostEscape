@@ -15,6 +15,20 @@ WeaponThunder *WeaponThunder::addWeaponThunderChild(Actor *parent, float cool_do
     return weapon;
 }
 
+void WeaponThunder::init()
+{
+    Weapon::init();
+    auto mainScene = _game.getCurrentScene();
+    auto position = glm::vec2(_game.getScreenSize().x - 100.f, 30.f);
+    _hud_skill = HUDSkill::addHudSkillChild(mainScene, "assets/UI/Electric-Icon.png", position, .1f, Anchor::CENTER);
+}
+
+void WeaponThunder::update(float dt)
+{
+    Weapon::update(dt);
+    if(_hud_skill) _hud_skill->setPercentage(_cool_down_timer / _cool_down);
+}
+
 void WeaponThunder::handleEvents(SDL_Event &event)
 {
     Weapon::handleEvents(event);
@@ -24,9 +38,13 @@ void WeaponThunder::handleEvents(SDL_Event &event)
         {
             if (canAttack())
             {
-                Scene *scene = _game.getCurrentScene();
-                auto spell = Spell::addSpellChild(scene, "assets/effect/Thunderstrike w blur.png", scene->screenToWorld(_game.getMousePosition()), 40.f, 3.f, Anchor::CENTER);
+                Scene *mainScene = _game.getCurrentScene();
+                auto pos = mainScene->screenToWorld(_game.getMousePosition());
+                auto spell = Spell::addSpellChild(mainScene, "assets/effect/Thunderstrike w blur.png", pos, 40.f, 3.f, Anchor::CENTER);
+                attack(pos, spell);
             }
         }
     }
 }
+
+

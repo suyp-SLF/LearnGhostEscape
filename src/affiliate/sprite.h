@@ -15,10 +15,11 @@ struct Texture
 class Sprite : public ObjectAffiliate
 {
 protected:
+    glm::vec3 _color = glm::vec3(1.f);
     Texture _texture;
     glm::vec2 _percentage =glm::vec2(1.f);
 public:
-    static Sprite *addSpriteChild(ObjectScreen *parent, const std::string& texture_path, float scale = 1.f, Anchor anchor = Anchor::CENTER);
+    static Sprite *addSpriteChild(ObjectScreen *parent, const std::string& texture_path, float scale = 1.f, Anchor anchor = Anchor::CENTER, glm::vec3 color = glm::vec3(1.f));
     Sprite() = default;
     void setScale(float scale){ _size *= scale; }
     virtual void render() override;
@@ -35,5 +36,8 @@ public:
     // 百分比
     glm::vec2 getPercentage() const { return _percentage; }
     void setPercentage(glm::vec2 percentage) { _percentage = percentage; }
+    // 颜色
+    glm::vec3 getColor() const { return _color; }
+    void setColor(glm::vec3 color) { _color = color; }
 };
 #endif // SPRITE_H

@@ -6,7 +6,7 @@ Texture::Texture(const std::string &file_path)
     SDL_GetTextureSize(texture, &src_rect.w, &src_rect.h);
 }
 
-Sprite *Sprite::addSpriteChild(ObjectScreen *parent, const std::string &texture_path, float scale, Anchor anchor)
+Sprite *Sprite::addSpriteChild(ObjectScreen *parent, const std::string &texture_path, float scale, Anchor anchor, glm:: vec3 color)
 {
     auto sprite = new Sprite();
     sprite->init();
@@ -14,7 +14,8 @@ Sprite *Sprite::addSpriteChild(ObjectScreen *parent, const std::string &texture_
     sprite->setScale(scale);
     sprite->setOffsetByAnchor(anchor);
     sprite->setParent(parent);
-    parent->addChild(sprite);
+    sprite->setColor(color);
+    parent->safeAddChild(sprite);
     return sprite;
 }
 
@@ -26,7 +27,10 @@ void Sprite::render()
         return;
     }
     auto pos = _parent->getRenderPosition() + _offset;
-    _game.drawImage(_texture, pos, _size, _percentage);
+    _game.drawImage(_texture, pos, _size, _percentage, 1.f, _color);
+#ifdef DEBUG_MDOE
+    // 碰撞箱
+#endif
 }
 
 void Sprite::setTexture(const Texture &texture)

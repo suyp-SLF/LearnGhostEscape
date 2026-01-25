@@ -2,6 +2,12 @@
 
 #include "scene.h"
 
+void ObjectWorld::init()
+{
+    ObjectScreen::init();
+    _type = ObjectType::OBJECT_WORLD;
+}
+
 void ObjectWorld::update(float dt)
 {
     ObjectScreen::update(dt);

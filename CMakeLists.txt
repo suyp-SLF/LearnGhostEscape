@@ -9,6 +9,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # 设置编译选项
 if (MSVC)
     add_compile_options(/W4)
+elseif(APPLE)
+    # 告诉编译器注入内存监控代码
+    add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
+    # 告诉链接器链接内存监控库
+    add_link_options(-fsanitize=address)
+    message(STATUS "Mac Address Sanitizer (ASan) 已激活")
+    add_compile_options(-Wall -Wextra -Wpedantic)
 else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -38,6 +45,7 @@ add_executable(
     src/core/data_struct.h
     src/core/object.cpp
     src/core/game.cpp
+    src/core/object_screen.cpp
     src/core/object_world.cpp
     src/core/object_affiliate.cpp
     src/core/actor.cpp
@@ -46,6 +54,7 @@ add_executable(
 
     src/screen/ui_mouse.cpp
     src/screen/hud_stats.cpp
+    src/screen/hud_skill.cpp
 
     src/raw/stats.cpp
     src/raw/weapon.cpp

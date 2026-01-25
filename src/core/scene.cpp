@@ -19,29 +19,41 @@ void Scene::handleEvents(SDL_Event &event)
 void Scene::update(float dt)
 {
     // 1. 同步待添加列表
-    for (auto &child : _children_wait_to_add) { addChild(child); }
+    for (auto &child : _children_wait_to_add)
+    {
+        addChild(child);
+    }
     _children_wait_to_add.clear();
 
-    if (!_is_active) return;
+    if (!_is_active)
+        return;
 
     // 2. 关键：只调用一次基类 update。
     // 这会处理所有子节点的逻辑，并安全地 delete 掉标记为 _is_delete 的对象。
-    Object::update(dt); 
+    Object::update(dt);
 
     // 3. 同步 Scene 自己的辅助列表
     // 注意：这里只负责从分类容器里移除指针，绝对不能调用 delete！
-    for (auto it = _children_world.begin(); it != _children_world.end(); ) {
-        if ((*it)->getIsDelete()) {
+    for (auto it = _children_world.begin(); it != _children_world.end();)
+    {
+        if ((*it)->getIsDelete())
+        {
             it = _children_world.erase(it); // 仅仅是移除索引
-        } else {
+        }
+        else
+        {
             // 这里也不要再调 update 了，因为 Object::update 已经调过了
             ++it;
         }
     }
-    for (auto it = _children_screen.begin(); it != _children_screen.end(); ) {
-        if ((*it)->getIsDelete()) {
+    for (auto it = _children_screen.begin(); it != _children_screen.end();)
+    {
+        if ((*it)->getIsDelete())
+        {
             it = _children_screen.erase(it); // 仅仅是移除索引
-        } else {
+        }
+        else
+        {
             // 这里也不要再调 update 了，因为 Object::update 已经调过了
             ++it;
         }
@@ -51,12 +63,9 @@ void Scene::update(float dt)
 void Scene::render()
 {
     // 打印调试信息
-    _game.drawText("Children:" + std::to_string(_children.size()) + 
-                   " World:" + std::to_string(_children_world.size()) + 
-                   " Screen:" + std::to_string(_children_screen.size()),
-                   glm::vec2(10.0f, 40.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 
-    if (!_is_active) return;
+    if (!_is_active)
+        return;
 
     // 只需要这一行！
     // Object::render 会递归绘制 _children 里的所有东西（Player, Enemy, Spell...）
@@ -67,6 +76,10 @@ void Scene::render()
     for (auto &child : _children_world) { child->render(); } // ❌ 删掉，这里是野指针高发区
     for (auto &child : _children_screen) { child->render(); } // ❌ 删掉
     */
+    _game.drawText("Children:" + std::to_string(_children.size()) +
+                       " World:" + std::to_string(_children_world.size()) +
+                       " Screen:" + std::to_string(_children_screen.size()),
+                   glm::vec2(10.0f, 40.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 }
 
 void Scene::clean()
@@ -76,9 +89,15 @@ void Scene::clean()
     // 下面这些循环会访问已经被 delete 的内存！
     for (auto &child : _children_world)
     {
-        // child->clean(); // ❌ 报错：child 已经是野指针
+        child->clean(); // ❌ 报错：child 已经是野指针
     }
     _children_world.clear();
+
+    for (auto &child : _children_screen)
+    {
+        child->clean(); // ❌ 报错：child 已经是野指针
+    }
+    _children_screen.clear();
 }
 
 void Scene::addChild(Object *child)

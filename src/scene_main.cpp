@@ -8,6 +8,7 @@
 
 void SceneMain::init()
 {
+    Scene::init();
     SDL_HideCursor();
 
     _world_size = _game.getScreenSize() * 3.0f; // 3 倍于屏幕大小
@@ -53,5 +54,4 @@ void SceneMain::renderBackground()
     auto end = _world_size - _camera_position;
     _game.drawGrid(start, end, 80.0f, glm::vec2(0), {0.5, 0.5, 0.5, 1.0});
     _game.drawBoundary(start, end, 4.0, {1.0, 1.0, 1.0, 1.0});
-    _game.drawFPS({100.0f, 100.0f}, {1.0f, 1.0f, 1.0f, 1.0f});
 }

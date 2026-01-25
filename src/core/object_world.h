@@ -10,7 +10,7 @@ protected:
     glm::vec2 _position = glm::vec2(0, 0); // 世界坐标
     Collider *_collider = nullptr;
 public:
-    virtual void init() override {_type = ObjectType::OBJECT_WORLD; };
+    virtual void init() override;
     virtual void update(float dt) override;
 
     // GETTER AND SETTER

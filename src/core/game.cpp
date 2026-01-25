@@ -194,6 +194,7 @@ void Game::render()
     SDL_SetRenderDrawColor(_renderer, 100, 100, 100, 255);
     SDL_RenderClear(_renderer);
     _current_scene->render();
+    drawFPS({100.0f, 100.0f}, {1.0f, 1.0f, 1.0f, 1.0f});
     SDL_RenderPresent(_renderer);
 }
 
@@ -237,6 +238,12 @@ void Game::clean()
     MIX_Quit();
     // SDL3销毁SDL
     SDL_Quit();
+}
+void Game::drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask, float alpha, glm::vec3 color)
+{
+    SDL_SetTextureColorModFloat(texture.texture, color.x, color.y, color.z);
+    drawImage(texture, position, size, mask, alpha);
+    SDL_SetTextureColorModFloat(texture.texture, 1.f, 1.f, 1.f);
 }
 void Game::drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask, float alpha)
 {
