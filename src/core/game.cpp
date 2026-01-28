@@ -1,5 +1,6 @@
 #include "game.h"
 #include "../scene_main.h"
+#include "../scene_title.h"
 
 #include "actor.h"
 #include "../player.h"
@@ -162,7 +163,7 @@ void Game::init(std::string title, int width, int height)
 
     _frame_delay = 1.0e9 / _FPS; // 60帧每秒
 
-    _current_scene = new SceneMain();
+    _current_scene = new SceneTitle();
     _current_scene->init();
 }
 
@@ -386,7 +387,7 @@ void Game::drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, fl
     SDL_SetRenderDrawColorFloat(_renderer, 0, 0, 0, 1);
 }
 
-void Game::drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const SDL_FColor color)
+void Game::drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const glm::vec4 color)
 {
     SDL_SetRenderDrawColorFloat(_renderer, color.r, color.g, color.b, color.a);
     for (size_t i = 0; i < grid_width; i++)

@@ -46,6 +46,7 @@ private:
     Uint64 _frame_delay = 0;               // 帧间隔时间，单位纳秒
     float _dt = 0;                         // 时间间隔,单位秒
 
+    int _highscore = 0;
     // -- 游戏状态 --
     bool _is_running = true; // 游戏是否运行
 
@@ -82,6 +83,8 @@ public:
     glm::vec2 getMousePosition() const { return _mouse_position; }
     SDL_MouseButtonFlags getMouseButtonState() const { return _mouse_button_state; }
     TTF_Text *getTextVe() const { return _textVe; }
+    void setHighscore(int score) { _highscore = score; }
+    int getHighscore() const { return _highscore; }
 
     // 随机数
     float randomFloat(float min, float max) { return std::uniform_real_distribution<float>(min, max)(_random_generator); }          // 生成一个[min, max)之间的随机浮点数
@@ -102,7 +105,7 @@ public:
     TTF_Text *createTTFText(const std::string &content, const std::string &font_path, int font_size = 12);
     // 工具类,用于绘制网格,offset_x和offset_y为网格的偏移量
     void drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float cell_size, const glm::vec2 offset, const SDL_FColor color); // 绘制网格
-    void drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const SDL_FColor color);                    // 绘制边界
+    void drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const glm::vec4 color);                    // 绘制边界
     void drawRect(const RectData &data);                                                                                                      // 绘制矩形
     void drawFPS(const glm::vec2 &position, const SDL_FColor color);                                                                          // 绘制FPS
     void drawText(const std::string &content, glm::vec2 position, glm::vec4 color = glm::vec4(1.0f));
