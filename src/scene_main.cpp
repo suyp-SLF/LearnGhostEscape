@@ -5,6 +5,8 @@
 #include "screen/ui_mouse.h"
 #include "world/spell.h"
 #include "screen/hud_stats.h"
+#include "affiliate/text_label.h"
+#include "screen/hud_text.h"
 
 void SceneMain::init()
 {
@@ -23,10 +25,16 @@ void SceneMain::init()
     _spawner->setTarget(_player);
     addChild(_spawner);
 
-    _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER); // 添加鼠标
-    _hud_stats = HUDStats::addHudStatsChild(this, _player, glm::vec2(30.f));                                 // 添加血条
+    _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER);   // 添加鼠标
+    _hud_stats = HUDStats::addHudStatsChild(this, _player, glm::vec2(30.f));                                   // 添加血条
+    TextLabel::addTextLabelChild(_player, "您", "assets/font/VonwaonBitmap-16px.ttf", 16, Anchor::CENTER); // 添加文本
+    _hud_text_score = HUDText::addHUDTextChild(
+        this,
+        "得分: 012321122123213213213213213123",
+        glm::vec2(_game.getScreenSize().x - 250.f, 30.f),
+        glm::vec2(100, 50)
+    ); // 添加得分文本
 }
-
 void SceneMain::handleEvents(SDL_Event &event)
 {
     Scene::handleEvents(event); // 父类

@@ -27,7 +27,7 @@ void UIMouse::update(float dt)
 void UIMouse::render()
 {
     ObjectScreen::render();
-    SDL_Log("Mouse Pos: %f, %f", getRenderPosition().x, getRenderPosition().y); // 取消注释查看坐标是否正常
+    //SDL_Log("Mouse Pos: %f, %f", getRenderPosition().x, getRenderPosition().y); // 取消注释查看坐标是否正常
     _game.drawBoundary(getRenderPosition(), getRenderPosition(), 5.0f, {1.0, 0.0, 0.0, 1.0});
 }
 

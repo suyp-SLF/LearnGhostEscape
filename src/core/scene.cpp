@@ -63,19 +63,9 @@ void Scene::update(float dt)
 void Scene::render()
 {
     // 打印调试信息
-
     if (!_is_active)
         return;
-
-    // 只需要这一行！
-    // Object::render 会递归绘制 _children 里的所有东西（Player, Enemy, Spell...）
     Object::render();
-
-    // --- 彻底删除下面这两段手动遍历绘制的代码 ---
-    /*
-    for (auto &child : _children_world) { child->render(); } // ❌ 删掉，这里是野指针高发区
-    for (auto &child : _children_screen) { child->render(); } // ❌ 删掉
-    */
     _game.drawText("Children:" + std::to_string(_children.size()) +
                        " World:" + std::to_string(_children_world.size()) +
                        " Screen:" + std::to_string(_children_screen.size()),

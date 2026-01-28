@@ -2,13 +2,13 @@
 #define SCENE_MAIN_H
 
 #include "core/scene.h"
-
 #include <glm/glm.hpp>
 
 class HUDStats;
 class UIMouse;
 class Player;
 class Spawner;
+class HUDText;
 class SceneMain : public Scene
 {
 private:
@@ -17,6 +17,8 @@ private:
     Spawner *_spawner = nullptr;    // 敌人生成器
     UIMouse *_ui_mouse = nullptr;   // 鼠标
     HUDStats *_hud_stats = nullptr; // 状态栏
+
+    HUDText *_hud_text_score = nullptr; // 得分
 public:
     SceneMain() = default;
     virtual ~SceneMain() = default;

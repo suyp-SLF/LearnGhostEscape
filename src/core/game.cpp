@@ -280,6 +280,11 @@ void Game::drawImage(const Texture &texture, const glm::vec2 &position, const gl
     // 4. 恢复透明度为不透明（防止同一个纹理在其他地方绘制时变透明）
     SDL_SetTextureAlphaMod(texture.texture, 255);
 }
+TTF_Text *Game::createTTFText(const std::string &content, const std::string &font_path, int font_size)
+{
+    auto font = getAssetStore()->getFont(font_path, font_size);
+    return TTF_CreateText(_textEngine, font, content.c_str(), 0);
+}
 void Game::drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float cell_size, const glm::vec2 offset, const SDL_FColor color)
 {
     SDL_SetRenderDrawColorFloat(_renderer, color.r, color.g, color.b, color.a);

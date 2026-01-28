@@ -64,14 +64,20 @@ void Object::update(float dt)
 
 void Object::render()
 {
+    // 1. 提取所有子对象的名称并拼接
+    std::string renderOrder = this->_name + " Order: ";
     if (!_is_active)
         return;
     for (auto &child : _children)
     {
+        renderOrder += child->_name + " ";
         if (!child->_is_active)
             continue;
         child->render();
     }
+
+    // 2. 将结果渲染到屏幕上（调整 y 坐标避免重叠）
+    SDL_Log(renderOrder.c_str());
 }
 
 void Object::clean()
