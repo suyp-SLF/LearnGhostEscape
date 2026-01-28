@@ -38,6 +38,7 @@ void WeaponThunder::handleEvents(SDL_Event &event)
         {
             if (canAttack())
             {
+                _game.playSoundEffect("assets/sound/big-thunder.mp3");
                 Scene *mainScene = _game.getCurrentScene();
                 auto pos = mainScene->screenToWorld(_game.getMousePosition());
                 auto spell = Spell::addSpellChild(mainScene, "assets/effect/Thunderstrike w blur.png", pos, 40.f, 3.f, Anchor::CENTER);

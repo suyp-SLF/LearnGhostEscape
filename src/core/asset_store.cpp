@@ -42,26 +42,24 @@ SDL_Texture *AssetStore::loadTexture(const std::string &_file_path)
 
 MIX_Audio *AssetStore::loadSound(const std::string &_file_path)
 {
-    MIX_Audio *sound = MIX_LoadAudio(_mixer, _file_path.c_str(), false);
-    if (sound == nullptr)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "加载音频失败: %s", SDL_GetError());
-        return nullptr;
+    // is_stream = false: 全量加载到内存，适合短促音效
+    MIX_Audio* audio = MIX_LoadAudio(_mixer, _file_path.c_str(), false);
+    if (!audio) {
+        SDL_Log("音效加载失败: %s -> %s", _file_path.c_str(), SDL_GetError());
     }
-    _sounds.emplace(_file_path, sound);
-    return sound;
+    _sounds.emplace(_file_path, audio);
+    return audio;
 }
 
 MIX_Audio *AssetStore::loadMusic(const std::string &_file_path)
 {
-    MIX_Audio *music = MIX_LoadAudio(_mixer, _file_path.c_str(), false);
-    if (music == nullptr)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "加载背景音乐失败: %s", SDL_GetError());
-        return nullptr;
+    // is_stream = true: 流式播放，适合长背景音乐
+    MIX_Audio* audio = MIX_LoadAudio(_mixer, _file_path.c_str(), true);
+    if (!audio) {
+        SDL_Log("音乐加载失败: %s -> %s", _file_path.c_str(), SDL_GetError());
     }
-    _musics.emplace(_file_path, music);
-    return music;
+    _musics.emplace(_file_path, audio);
+    return audio;
 }
 
 TTF_Font *AssetStore::loadFont(const std::string &_file_path, int font_size)

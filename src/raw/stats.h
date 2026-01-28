@@ -27,7 +27,7 @@ public:
     bool canUseMana(float mana_cost);
     void useMana(float mana_cost);
     void regenMana(float dt);
-    void takeDamage(float damage);
+    int takeDamage(float damage);
 
     // GETTER AND SETTER
     float getHealth() { return _health; }

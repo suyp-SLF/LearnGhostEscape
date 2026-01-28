@@ -28,9 +28,15 @@ void Actor::isInvisible()
     _stats->isInvincible();
 }
 
-void Actor::takeDamage(int damage)
+int Actor::takeDamage(int damage)
 {
-    _stats->takeDamage(damage); 
+    if (_stats)
+    {
+       return _stats->takeDamage(damage); 
+    }else
+    {
+        return 0;
+    }
 }
 
 void Actor::updateHealthBar()

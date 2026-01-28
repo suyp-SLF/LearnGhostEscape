@@ -44,9 +44,9 @@ void Stats::regenMana(float dt)
         _mana = _max_mana;
 }
 
-void Stats::takeDamage(float damage)
+int Stats::takeDamage(float damage)
 {
-    if (_is_invincible) return;
+    if (_is_invincible) return 0;
     _health -= damage;
     if (_health < 0)
     {
@@ -55,4 +55,5 @@ void Stats::takeDamage(float damage)
     }
     _is_invincible = true;
     _invincible_timer = 0.f;
+    return damage;
 }

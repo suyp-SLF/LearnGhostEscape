@@ -22,6 +22,8 @@ private:
     SpriteAnim *_anim_hurt = nullptr;
     SpriteAnim *_anim_die = nullptr;
     SpriteAnim *_current_anim = nullptr;
+
+    int _score = 10; // score when enemy is killed
 public:
     virtual void init() override;
     virtual void handleEvents(SDL_Event &event) override;

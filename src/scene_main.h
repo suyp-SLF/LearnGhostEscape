@@ -31,6 +31,7 @@ public:
 private:
     // 绘制背景图片
     void renderBackground();
+    void updateScore(); // 更新得分
 };
 
 #endif // SCENE_MAIN_H

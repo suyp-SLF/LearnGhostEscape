@@ -46,6 +46,15 @@ void Player::clean()
     Actor::clean();
 }
 
+int Player::takeDamage(int damage)
+{
+    int fin_damage = Actor::takeDamage(damage);
+    if (fin_damage > 0)
+    {
+        _game.playSoundEffect("assets/sound/hit-flesh-02-266309.mp3");
+    }
+}
+
 void Player::keyboardControl()
 {
     auto currentKeyStates = SDL_GetKeyboardState(NULL);
@@ -105,5 +114,6 @@ void Player::checkIsDead()
         _game.getCurrentScene()->safeAddChild(_effect);
         _effect->setPosition(_position);
         setActive(false);
+        _game.playSoundEffect("assets/sound/female-scream-02-89290.mp3");
     }
 }

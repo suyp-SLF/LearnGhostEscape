@@ -19,8 +19,9 @@ protected:
     
 public:
     virtual void update(float dt) override;
+    virtual void move(float dt);
+    virtual int takeDamage(int damage);
 
-    void move(float dt);
     // getter and setter
     void setVelocity(glm::vec2 velocity) { _velocity = velocity; };
     glm::vec2 getVelocity() { return _velocity; };
@@ -36,7 +37,6 @@ public:
 
     void getIsAlive();
     void isInvisible();
-    void takeDamage(int damage);
 private:
     void updateHealthBar();
 };

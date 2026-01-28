@@ -67,6 +67,18 @@ void Game::init(std::string title, int width, int height)
         _is_running = false;
         return;
     }
+    // 1. 创建背景音乐专用音轨 (背景音乐线)
+    _bgm_track = MIX_CreateTrack(_mixer);
+
+    // 2. 创建音效音轨池 (预留 8 条线)
+    for (int i = 0; i < TRACK_POOL_SIZE; ++i)
+    {
+        MIX_Track *trk = MIX_CreateTrack(_mixer);
+        if (trk)
+        {
+            _effect_tracks.push_back(trk);
+        }
+    }
     // SDL3创建窗口与渲染器
     // --- Window ---
     SDL_PropertiesID window_props = SDL_CreateProperties();
@@ -207,12 +219,6 @@ void Game::clean()
         delete _current_scene;
         _current_scene = nullptr;
     }
-    // 清理资源管理器
-    if (_asset_store)
-    {
-        _asset_store->clean();
-        delete _asset_store;
-    }
     // 清理文本引擎TTF_TextEngine
     if (_textEngine)
     {
@@ -234,10 +240,91 @@ void Game::clean()
     // SDL3销毁TTF
     TTF_Quit();
     // SDL3销毁Mixer
+    // 销毁背景音乐音轨
+    if (_bgm_track) {
+        MIX_DestroyTrack(_bgm_track);
+        _bgm_track = nullptr;
+    }
+    // ------音乐-------
+    // 销毁音轨池
+    for (auto trk : _effect_tracks) {
+        MIX_DestroyTrack(trk);
+    }
+    _effect_tracks.clear();
+
+    // 销毁资源管理器（它会释放 MIX_Audio）
+    if (_asset_store) {
+        _asset_store->clean();
+        delete _asset_store;
+    }
+
+    // 销毁 Mixer
     MIX_DestroyMixer(_mixer);
     MIX_Quit();
     // SDL3销毁SDL
     SDL_Quit();
+}
+void Game::playMusic(const std::string &music_path, int loops)
+{
+    if (!_bgm_track) return;
+
+    // 1. 优化：如果已经在播放这首歌，就直接返回，避免重启音乐
+    if (_current_music_path == music_path) {
+        return; 
+    }
+
+    // 2. 停止当前播放并解绑音频
+    MIX_SetTrackAudio(_bgm_track, nullptr);
+
+    // 3. 从资源管理器获取音频
+    // 注意：AssetStore::getMusic 内部应该是 MIX_LoadAudio(..., true) 以开启流式加载
+    MIX_Audio* music = _asset_store->getMusic(music_path);
+
+    if (music) {
+        // 4. 绑定音频到背景音轨
+        MIX_SetTrackAudio(_bgm_track, music);
+        
+        // 5. 开始播放
+        // loops: 0 通常代表播放一次，-1 或更大的数代表循环次数
+        MIX_PlayTrack(_bgm_track, loops);
+        
+        _current_music_path = music_path;
+    }
+}
+void Game::stopMusic()
+{
+    if (_bgm_track) {
+        MIX_SetTrackAudio(_bgm_track, nullptr); // 彻底移除音频
+        _current_music_path = "";
+    }
+}
+void Game::pauseMusic()
+{
+    if (_bgm_track) MIX_PauseTrack(_bgm_track);
+}
+void Game::resumeMusic()
+{
+    if (_bgm_track) MIX_ResumeTrack(_bgm_track);
+}
+void Game::playSoundEffect(const std::string &sound_path)
+{
+    if (_effect_tracks.empty()) return;
+
+    // 1. 从资源管理器获取音效 (is_stream 为 false)
+    MIX_Audio* sound = _asset_store->getSound(sound_path);
+    if (!sound) return;
+
+    // 2. 轮询选择下一个音轨
+    MIX_Track* target_track = _effect_tracks[_next_track_index];
+    _next_track_index = (_next_track_index + 1) % TRACK_POOL_SIZE;
+
+    // 3. 强制重置并播放
+    // 先解绑当前可能正在播放的声音（相当于停止旧声音）
+    MIX_SetTrackAudio(target_track, nullptr); 
+    // 绑定新音效
+    MIX_SetTrackAudio(target_track, sound);
+    // 播放 1 次 (loops = 1)
+    MIX_PlayTrack(target_track, 1);
 }
 void Game::drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask, float alpha, glm::vec3 color)
 {
@@ -258,8 +345,7 @@ void Game::drawImage(const Texture &texture, const glm::vec2 &position, const gl
         texture.src_rect.x,
         texture.src_rect.y,
         texture.src_rect.w * mask.x,
-        texture.src_rect.h * mask.y
-    };
+        texture.src_rect.h * mask.y};
 
     SDL_FRect dst_rect = {
         position.x,

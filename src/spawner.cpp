@@ -10,6 +10,7 @@ void Spawner::update(float dt)
     {
         _spawn_timer = 0.0f;
         SDL_Log("Spawner: spawn enemies");
+        _game.playSoundEffect("assets/sound/silly-ghost-sound-242342.mp3");
         for (int i = 0; i < _spawn_count; i++)
         {
             auto position = _game.randomVec2(
