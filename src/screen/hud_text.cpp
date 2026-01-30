@@ -14,9 +14,8 @@ HUDText *HUDText::addHUDTextChild(
     hud_text->init();
     hud_text->setRenderPosition(render_position);
     hud_text->setSpriteBg(Sprite::addSpriteChild(hud_text, bg_path, 1.f, anchor));
-    hud_text->setSize(size);
     hud_text->setTextLabel(TextLabel::addTextLabelChild(hud_text, text, font_path, font_size, anchor));
-    hud_text->setText(text);
+    hud_text->setBgSizeByText(20.f);
     if (parent)
     {
         parent->addChild(hud_text);
@@ -40,4 +39,10 @@ void HUDText::setBackground(const std::string &path)
     {
         _sprite_bg = Sprite::addSpriteChild(this, path, 1.f, Anchor::CENTER);
     }
+}
+
+void HUDText::setBgSizeByText(float margin)
+{
+    auto text_size = _text_label->getSize();
+    setSize(text_size + glm::vec2(margin * 2));
 }

@@ -101,6 +101,8 @@ void Scene::addChild(Object *child)
 
     switch (child->getObjectType())
     {
+    case ObjectType::NONE:
+        _children.push_back(child);
     case ObjectType::OBJECT_WORLD:
     case ObjectType::ENEMY:
         _children_world.push_back(static_cast<ObjectWorld *>(child));

@@ -76,8 +76,9 @@ void Object::render()
         child->render();
     }
 
-    // 2. 将结果渲染到屏幕上（调整 y 坐标避免重叠）
+#ifdef DEBUGMODE
     SDL_Log(renderOrder.c_str());
+#endif
 }
 
 void Object::clean()

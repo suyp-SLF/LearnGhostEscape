@@ -49,7 +49,6 @@ void SpriteAnim::render()
         std::to_string(_current_frame),
         _parent->getRenderPosition() + _offset,
         glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
-    _game.drawBoundary(_parent->getRenderPosition() + _offset, _parent->getRenderPosition() + _offset + _size, 1, {255, 255, 255, 255});
 #endif
 }
 

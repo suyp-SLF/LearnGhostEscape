@@ -3,7 +3,7 @@
 void UIMouse::update(float dt)
 {
     // ... 原有逻辑 ...
-    glm::vec2 pos = getRenderPosition();
+    //glm::vec2 pos = getRenderPosition();
     //SDL_Log("Mouse Pos: %f, %f", pos.x, pos.y); // 取消注释查看坐标是否正常
     //setRenderPosition(pos);
     _timer += dt;

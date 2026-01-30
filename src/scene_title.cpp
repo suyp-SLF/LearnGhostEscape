@@ -1,5 +1,7 @@
 #include "scene_title.h"
 #include "screen/hud_text.h"
+#include "screen/hud_button.h"
+#include "scene_main.h"
 
 #include <cmath>
 
@@ -8,21 +10,47 @@ void SceneTitle::init()
     Scene::init();
     auto screen_size = _game.getScreenSize();
     auto size = glm::vec2(screen_size.x / 2.f, screen_size.y / 3.f);
-    HUDText::addHUDTextChild(
-        this,
-        "幽 灵 逃 生",
-        screen_size / 2.f - glm::vec2(0, 100),
-        size,
-        "assets/font/VonwaonBitmap-16px.ttf",
-        64);
+    HUDText::addHUDTextChild(this,
+                             "幽 灵 逃 生",
+                             screen_size / 2.f - glm::vec2(0, 100),
+                             size,
+                             "assets/font/VonwaonBitmap-16px.ttf",
+                             64);
     auto _score_text = "最高分：" + std::to_string(_game.getHighscore());
-    HUDText::addHUDTextChild(
-        this,
-        _score_text,
-        screen_size / 2.f + glm::vec2(0, 100),
-        glm::vec2(200, 50),
-        "assets/font/VonwaonBitmap-16px.ttf",
-        32);
+    HUDText::addHUDTextChild(this,
+                             _score_text,
+                             screen_size / 2.f + glm::vec2(0, 100),
+                             glm::vec2(200, 50),
+                             "assets/font/VonwaonBitmap-16px.ttf",
+                             32);
+    auto text = _game.loadTextFile("assets/credits.txt");
+    _quit_button = HUDButton ::addHUDButtonChild(this,
+                                                 glm::vec2(_game.getScreenSize().x * 5 / 6, _game.getScreenSize().y - 100),
+                                                 "assets/UI/A_Quit1.png",
+                                                 "assets/UI/A_Quit2.png",
+                                                 "assets/UI/A_Quit3.png",
+                                                 2.f,
+                                                 Anchor::CENTER);
+    _credits_button = HUDButton ::addHUDButtonChild(this,
+                                                    glm::vec2(_game.getScreenSize().x * 3 / 6, _game.getScreenSize().y - 100),
+                                                    "assets/UI/A_Credits1.png",
+                                                    "assets/UI/A_Credits2.png",
+                                                    "assets/UI/A_Credits3.png",
+                                                    2.f,
+                                                    Anchor::CENTER);
+    _start_button = HUDButton ::addHUDButtonChild(this,
+                                                  glm::vec2(_game.getScreenSize().x * 1 / 5, _game.getScreenSize().y - 100),
+                                                  "assets/UI/A_Start1.png",
+                                                  "assets/UI/A_Start2.png",
+                                                  "assets/UI/A_Start3.png",
+                                                  2.f,
+                                                  Anchor::CENTER);
+
+    _credits_text = HUDText::addHUDTextChild(this,
+                                             text,
+                                             _game.getScreenSize() / 2.f,
+                                             glm::vec2(0, 0));
+    _credits_text->setActive(false);
 }
 
 void SceneTitle::render()
@@ -33,14 +61,33 @@ void SceneTitle::render()
 
 void SceneTitle::handleEvents(SDL_Event &event)
 {
+    if (_credits_text->getIsActive())
+    {
+        if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+        {
+            if (event.button.button == SDL_BUTTON_LEFT)
+            {
+                _credits_text->setActive(false);
+            }
+        }
+        return;
+    }
+
     Scene::handleEvents(event);
 }
 
 void SceneTitle::update(float dt)
 {
     _boundary_color_timer += dt;
-    Scene::update(dt);
     updateColor();
+    if (_credits_text->getIsActive())
+    {
+        return;
+    }
+    checkButtonQuit();
+    checkButtonStart();
+    checkButtonCredits();
+    Scene::update(dt);
 }
 
 void SceneTitle::renderBackground()
@@ -58,4 +105,28 @@ void SceneTitle::updateColor()
     _boundary_color.r = 0.5f + 0.5f * sinf(_boundary_color_timer * .8f);
     _boundary_color.g = 0.5f + 0.5f * sinf(_boundary_color_timer * .9f);
     _boundary_color.b = 0.5f + 0.5f * sinf(_boundary_color_timer * .7f);
+}
+
+void SceneTitle::checkButtonQuit()
+{
+    if (_quit_button->getIsTrigger())
+    {
+        _game.quit();
+    }
+}
+
+void SceneTitle::checkButtonStart()
+{
+    if (_start_button->getIsTrigger())
+    {
+        _game.safeChangeScene(new SceneMain());
+    }
+}
+
+void SceneTitle::checkButtonCredits()
+{
+    if (_credits_button->getIsTrigger())
+    {
+        _credits_text->setActive(true);
+    }
 }

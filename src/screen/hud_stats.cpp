@@ -34,6 +34,7 @@ HUDStats *HUDStats::addHudStatsChild(Object *parent, Actor *target, glm::vec2 re
     hud_stats->setRenderPosition(render_position);
     hud_stats->setTarget(target);
     if (parent) parent->safeAddChild(hud_stats);
+    return hud_stats;
 }
 
 void HUDStats::updateHealthBar()

@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#define DEBUG_MDOE
+
 #include "asset_store.h"
 #include "data_struct.h"
 
@@ -32,6 +34,7 @@ private:
     SDL_Renderer *_renderer = nullptr;
     MIX_Mixer *_mixer = nullptr;
     Scene *_current_scene = nullptr;       // 当前场景
+    Scene *_next_scene = nullptr;             // 下一个场景
     TTF_Font *_font = nullptr;             // 字体
     TTF_TextEngine *_textEngine = nullptr; // 文字引擎
     TTF_Text *_text = nullptr;             // 文字
@@ -76,6 +79,10 @@ public:
     void render();                                       // 渲染游戏
     void clean();                                        // 清理游戏资源
 
+    void quit() {_is_running = false;} // 退出游戏
+    void changeScene(Scene *scene); // 切换场景
+    void safeChangeScene(Scene *scene) {_next_scene = scene; } // 安全切换场景
+
     // getter and setter
     glm::vec2 getScreenSize() const { return _screen_size; }   // 获取屏幕大小
     Scene *getCurrentScene() const { return _current_scene; }  // 获取当前场景
@@ -103,12 +110,17 @@ public:
     void drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask = glm::vec2(1.f), float alpha = 1.f); // 绘制图片
     // 文字
     TTF_Text *createTTFText(const std::string &content, const std::string &font_path, int font_size = 12);
-    // 工具类,用于绘制网格,offset_x和offset_y为网格的偏移量
+    // 工具类
+    // 用于绘制网格,offset_x和offset_y为网格的偏移量
     void drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float cell_size, const glm::vec2 offset, const SDL_FColor color); // 绘制网格
     void drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const glm::vec4 color);                    // 绘制边界
     void drawRect(const RectData &data);                                                                                                      // 绘制矩形
     void drawFPS(const glm::vec2 &position, const SDL_FColor color);                                                                          // 绘制FPS
     void drawText(const std::string &content, glm::vec2 position, glm::vec4 color = glm::vec4(1.0f));
     void drawHBar(const glm::vec2 &position, const glm::vec2 &size, float value, const glm::vec4 color); // 绘制水平进度条
+    // 碰撞检测
+    bool isMouseInRect(const RectData &data);
+    // 读取文件
+    std::string loadTextFile(const std::string &path);
 };
 #endif // GAME_H

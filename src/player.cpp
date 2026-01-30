@@ -53,6 +53,7 @@ int Player::takeDamage(int damage)
     {
         _game.playSoundEffect("assets/sound/hit-flesh-02-266309.mp3");
     }
+    return fin_damage;
 }
 
 void Player::keyboardControl()

@@ -29,5 +29,7 @@ public:
     void setSize(const glm::vec2& size);
     std::string getText() const { return _text_label->getText(); }
     void setBackground(const std::string& path);
+    void setBgSizeByText(float margin);
+    
 };
 #endif // HUD_TEXT_H
