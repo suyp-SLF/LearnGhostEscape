@@ -22,9 +22,10 @@ void Enemy::init()
     _stats = Stats::addStatsChild(this);
 }
 
-void Enemy::handleEvents(SDL_Event &event)
+bool Enemy::handleEvents(SDL_Event &event)
 {
-    Actor::handleEvents(event);
+    if (Actor::handleEvents(event)) return true;
+    return false;
 }
 
 void Enemy::update(float dt)

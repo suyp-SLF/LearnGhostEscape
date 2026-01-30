@@ -14,18 +14,22 @@ protected:
     glm::vec2 _camera_position = glm::vec2(0); // 相机位置
     std::vector<ObjectWorld*> _children_world;            // 世界坐标下的子对象
     std::vector<ObjectScreen*> _children_screen;           // 屏幕坐标下的子对象
+
 public:
     Scene() = default;
     // 必须有定义！
     virtual ~Scene() = default;
 
     virtual void init() override {}; // 初始化
-    virtual void handleEvents(SDL_Event &event) override;
+    virtual bool handleEvents(SDL_Event &event) override;
     virtual void update(float dt) override;
     virtual void render() override;
     virtual void clean() override; // 清理
 
     // UTILS
+    // 
+    void pause();
+    void resume();
     // --添加,移除对象到场景中--
     virtual void addChild(Object *child) override;
     virtual void removeChild(Object *child) override;

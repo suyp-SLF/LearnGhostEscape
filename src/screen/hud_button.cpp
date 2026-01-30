@@ -28,24 +28,26 @@ void HUDButton::update(float dt)
     checkState();
 }
 
-void HUDButton::handleEvents(SDL_Event &event)
+bool HUDButton::handleEvents(SDL_Event &event)
 {
-    ObjectScreen::handleEvents(event);
-
     if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         if (event.button.button == SDL_BUTTON_LEFT && _is_hover) {
             _is_press = true;
+            return true;
         }
     }
     else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
         if (event.button.button == SDL_BUTTON_LEFT) {
             // 只有按下和松开都在按钮内，才算一次完整触发
-            if (_is_press && _is_hover) {
-                _is_trigger = true;
-            }
             _is_press = false;
+            if (_is_hover) {
+                _is_trigger = true;
+                return true;
+            }
         }
     }
+    if(ObjectScreen::handleEvents(event)) return true;
+    return false;
 }
 
 void HUDButton::checkState()

@@ -9,6 +9,7 @@ class UIMouse;
 class Player;
 class Spawner;
 class HUDText;
+class HUDButton;
 class SceneMain : public Scene
 {
 private:
@@ -18,13 +19,17 @@ private:
     UIMouse *_ui_mouse = nullptr;   // 鼠标
     HUDStats *_hud_stats = nullptr; // 状态栏
 
+    HUDButton *_pause_button = nullptr; // 暂停按钮
+    HUDButton *_back_button = nullptr; // 恢复按钮
+    HUDButton *_restart_button = nullptr; // 退出按钮
+
     HUDText *_hud_text_score = nullptr; // 得分
 public:
     SceneMain() = default;
     virtual ~SceneMain() = default;
 
     virtual void init() override; // 初始化
-    virtual void handleEvents(SDL_Event &event) override;
+    virtual bool handleEvents(SDL_Event &event) override;
     virtual void update(float dt) override;
     virtual void render() override;
     virtual void clean() override; // 清理
@@ -32,6 +37,10 @@ private:
     // 绘制背景图片
     void renderBackground();
     void updateScore(); // 更新得分
+
+    void checkPauseButton(); // 检查暂停按钮
+    void checkBackButton(); // 检查恢复按钮
+    void checkRestartButton(); // 检查重新开始按钮
 };
 
 #endif // SCENE_MAIN_H

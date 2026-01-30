@@ -74,7 +74,7 @@ public:
     // -- 游戏主循环 --
     void run();                                          // 运行游戏主循环
     void init(std::string title, int width, int height); // 初始化
-    void handleEvents();                                 // 处理事件
+    bool handleEvents();                                 // 处理事件
     void update(float dt);                               // 更新游戏状态
     void render();                                       // 渲染游戏
     void clean();                                        // 清理游戏资源
@@ -105,6 +105,8 @@ public:
     void resumeMusic();                                            // 恢复音乐
     // 音效
     void playSoundEffect(const std::string &sound_path); // 播放音效
+    void pauseAllSoundEffects();                             // 停止所有音效
+    void resumeAllSoundEffects();                            // 恢复所有音效
     // 渲染图片
     void drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask, float alpha, glm::vec3 color);
     void drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask = glm::vec2(1.f), float alpha = 1.f); // 绘制图片

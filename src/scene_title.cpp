@@ -8,6 +8,10 @@
 void SceneTitle::init()
 {
     Scene::init();
+    SDL_ShowCursor();
+    // BGM
+    _game.playMusic("assets/bgm/Spooky music.mp3");
+
     auto screen_size = _game.getScreenSize();
     auto size = glm::vec2(screen_size.x / 2.f, screen_size.y / 3.f);
     HUDText::addHUDTextChild(this,
@@ -59,7 +63,7 @@ void SceneTitle::render()
     Scene::render();
 }
 
-void SceneTitle::handleEvents(SDL_Event &event)
+bool SceneTitle::handleEvents(SDL_Event &event)
 {
     if (_credits_text->getIsActive())
     {
@@ -68,12 +72,12 @@ void SceneTitle::handleEvents(SDL_Event &event)
             if (event.button.button == SDL_BUTTON_LEFT)
             {
                 _credits_text->setActive(false);
+                return true;
             }
         }
-        return;
     }
-
-    Scene::handleEvents(event);
+    if (Scene::handleEvents(event)) return true;
+    return false;
 }
 
 void SceneTitle::update(float dt)

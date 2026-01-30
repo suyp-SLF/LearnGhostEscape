@@ -29,7 +29,7 @@ public:
     virtual ~SceneTitle() = default;
     virtual void init() override;
     virtual void render() override;
-    virtual void handleEvents(SDL_Event &event) override;
+    virtual bool handleEvents(SDL_Event &event) override;
     virtual void update(float dt) override;
 
 private:

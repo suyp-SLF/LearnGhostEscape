@@ -13,6 +13,6 @@ public:
     static WeaponThunder *addWeaponThunderChild(Actor *parent, float cool_down, float mana_cost);
     virtual void init() override;
     virtual void update(float dt) override;
-    virtual void handleEvents(SDL_Event &event) override;
+    virtual bool handleEvents(SDL_Event &event) override;
 };
 #endif // WEAPON_THUNDER_H

@@ -7,12 +7,42 @@
 #include "screen/hud_stats.h"
 #include "affiliate/text_label.h"
 #include "screen/hud_text.h"
+#include "screen/hud_button.h"
+#include "scene_title.h"
 
 void SceneMain::init()
 {
     Scene::init();
     SDL_HideCursor();
-    //
+
+    _hud_text_score = HUDText::addHUDTextChild(this,
+                                               "得分: 0",
+                                               glm::vec2(_game.getScreenSize().x - 250.f, 30.f),
+                                               glm::vec2(100, 50)); // 添加得分文本
+
+    _restart_button = HUDButton::addHUDButtonChild(this,
+                                                   _game.getScreenSize() - glm::vec2(230, 30),
+                                                   "assets/UI/A_Restart1.png",
+                                                   "assets/UI/A_Restart2.png",
+                                                   "assets/UI/A_Restart3.png",
+                                                   1.f,
+                                                   Anchor::CENTER);
+
+    _back_button = HUDButton::addHUDButtonChild(this,
+                                                _game.getScreenSize() - glm::vec2(140, 30),
+                                                "assets/UI/A_Back1.png",
+                                                "assets/UI/A_Back2.png",
+                                                "assets/UI/A_Back3.png",
+                                                1.f,
+                                                Anchor::CENTER);
+    _pause_button = HUDButton::addHUDButtonChild(this,
+                                                 _game.getScreenSize() - glm::vec2(50, 30),
+                                                 "assets/UI/A_Pause1.png",
+                                                 "assets/UI/A_Pause2.png",
+                                                 "assets/UI/A_Pause3.png",
+                                                 1.f,
+                                                 Anchor::CENTER);
+    // BGM
     _game.playMusic("assets/bgm/OhMyGhost.ogg");
     _world_size = _game.getScreenSize() * 3.0f; // 3 倍于屏幕大小
     _camera_position = _world_size / 2.0f - _game.getScreenSize() / 2.0f;
@@ -26,25 +56,24 @@ void SceneMain::init()
     _spawner->setTarget(_player);
     addChild(_spawner);
 
-    _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER);   // 添加鼠标
-    _hud_stats = HUDStats::addHudStatsChild(this, _player, glm::vec2(30.f));                                   // 添加血条
-    TextLabel::addTextLabelChild(_player, "您", "assets/font/VonwaonBitmap-16px.ttf", 16, Anchor::CENTER); // 添加文本
-    _hud_text_score = HUDText::addHUDTextChild(
-        this,
-        "得分: 0",
-        glm::vec2(_game.getScreenSize().x - 250.f, 30.f),
-        glm::vec2(100, 50)
-    ); // 添加得分文本
+    _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER); // 添加鼠标
+    _hud_stats = HUDStats::addHudStatsChild(this, _player, glm::vec2(30.f));                                 // 添加血条
+    TextLabel::addTextLabelChild(_player, "您", "assets/font/VonwaonBitmap-16px.ttf", 16, Anchor::CENTER);   // 添加文本
 }
-void SceneMain::handleEvents(SDL_Event &event)
+bool SceneMain::handleEvents(SDL_Event &event)
 {
-    Scene::handleEvents(event); // 父类
+    if (Scene::handleEvents(event))
+        return true; // 父类
+    return false;    // 返回false，表示事件未被处理
 }
 
 void SceneMain::update(float dt)
 {
     Scene::update(dt); // 父类update
     updateScore();
+    checkRestartButton();
+    checkBackButton();
+    checkPauseButton();
 }
 
 void SceneMain::render()
@@ -69,4 +98,39 @@ void SceneMain::renderBackground()
 void SceneMain::updateScore()
 {
     _hud_text_score->setText("得分: " + std::to_string(_player->getScore()));
+}
+
+void SceneMain::checkPauseButton()
+{
+    if (_pause_button->getIsTrigger())
+    {
+        if (_is_pause)
+        {
+            _is_pause = false;
+            _game.resumeMusic();
+            _game.resumeAllSoundEffects();
+        }
+        else
+        {
+            _is_pause = true;
+            _game.pauseMusic();
+            _game.pauseAllSoundEffects();
+        }
+    }
+}
+
+void SceneMain::checkBackButton()
+{
+    if (_back_button->getIsTrigger())
+    {
+        _game.safeChangeScene(new SceneTitle());
+    }
+}
+
+void SceneMain::checkRestartButton()
+{
+    if (_restart_button->getIsTrigger())
+    {
+        _game.safeChangeScene(new SceneMain());
+    }
 }

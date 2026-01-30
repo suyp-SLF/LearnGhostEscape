@@ -37,7 +37,7 @@ public:
 
     virtual void init() override;
     virtual void update(float dt) override;
-    virtual void handleEvents(SDL_Event &event) override; // HANDLE EVENT
+    virtual bool handleEvents(SDL_Event &event) override; // HANDLE EVENT
     void checkState();
     void checkHover();
     // GETTER AND SETTER

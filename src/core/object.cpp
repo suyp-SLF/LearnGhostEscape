@@ -1,4 +1,5 @@
 #include "object.h"
+#include "object_screen.h"
 
 #include <cxxabi.h>
 void Object::init()
@@ -17,16 +18,23 @@ void Object::init()
         _name = typeid(*this).name();
     }
 }
-void Object::handleEvents(SDL_Event &event)
+bool Object::handleEvents(SDL_Event &event)
 {
-    if (!_is_active)
-        return;
+    if (!_is_active){
+        return false;
+    }
     for (auto &child : _children)
     {
         if (!child->_is_active)
+        {
             continue;
-        child->handleEvents(event);
+        }
+        if (!_is_pause || child->getObjectType() == ObjectType::OBJECT_SCREEN)
+        {
+            if(child->handleEvents(event)) return true;
+        }
     }
+    return false;
 }
 
 void Object::update(float dt)
@@ -52,7 +60,10 @@ void Object::update(float dt)
         }
         else if (child->_is_active)
         {
-            (*it)->update(dt);
+            if (!_is_pause || child->getObjectType() == ObjectType::OBJECT_SCREEN)
+            {
+                (*it)->update(dt);
+            }
             ++it;
         }
         else

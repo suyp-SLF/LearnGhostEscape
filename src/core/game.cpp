@@ -22,7 +22,7 @@ void Game::run()
             changeScene(_next_scene);
             _next_scene = nullptr;
         }
-        handleEvents();                // 必须处理事件，否则窗口无法关闭且会转圈圈
+        handleEvents(); // 必须处理事件，否则窗口无法关闭且会转圈圈
         update(_dt);
         render();
 
@@ -172,7 +172,7 @@ void Game::init(std::string title, int width, int height)
     _current_scene->init();
 }
 
-void Game::handleEvents()
+bool Game::handleEvents()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -183,9 +183,11 @@ void Game::handleEvents()
             _is_running = false;
             break;
         default:
-            _current_scene->handleEvents(event);
+            if (_current_scene->handleEvents(event))
+                return true;
         }
     }
+    return false;
 }
 
 void Game::update(float dt)
@@ -323,6 +325,7 @@ void Game::stopMusic()
 }
 void Game::pauseMusic()
 {
+    // 暂停背景音乐
     if (_bgm_track)
         MIX_PauseTrack(_bgm_track);
 }
@@ -352,6 +355,22 @@ void Game::playSoundEffect(const std::string &sound_path)
     MIX_SetTrackAudio(target_track, sound);
     // 播放 1 次 (loops = 1)
     MIX_PlayTrack(target_track, 1);
+}
+void Game::pauseAllSoundEffects()
+{
+    // 暂停音效池中的所有音轨 (防止暂停时脚步声还在响)
+    for (auto trk : _effect_tracks)
+    {
+        MIX_PauseTrack(trk);
+    }
+}
+void Game::resumeAllSoundEffects()
+{
+    // 恢复音效池
+    for (auto trk : _effect_tracks)
+    {
+        MIX_ResumeTrack(trk);
+    }
 }
 void Game::drawImage(const Texture &texture, const glm::vec2 &position, const glm::vec2 &size, const glm::vec2 &mask, float alpha, glm::vec3 color)
 {

@@ -2,18 +2,16 @@
 #include "object_world.h"
 #include "object_screen.h"
 
-void Scene::handleEvents(SDL_Event &event)
+bool Scene::handleEvents(SDL_Event &event)
 {
     if (!_is_active)
-        return;
-
+    {
+        return false;
+    }
     // 1. 基类处理（处理 _children 列表）
     // 这一步会通过递归，自动分发事件给所有子节点（包括 World 和 Screen 对象）
-    Object::handleEvents(event);
-
-    // 2. 【彻底删除】 原本这里的 _children_world 循环
-    // 理由：对象已经在 Object::handleEvents 中处理过了。
-    // 如果再跑一遍，不仅性能浪费，还会因为 update 删除了对象而导致野指针崩溃。
+    if(Object::handleEvents(event)) return true;
+    return false;
 }
 
 void Scene::update(float dt)
@@ -88,6 +86,18 @@ void Scene::clean()
         child->clean(); // ❌ 报错：child 已经是野指针
     }
     _children_screen.clear();
+}
+
+void Scene::pause()
+{
+    _is_pause = true;
+    _game.pauseMusic();
+}
+
+void Scene::resume()
+{
+    _is_pause = false;
+    _game.resumeMusic();
 }
 
 void Scene::addChild(Object *child)

@@ -29,9 +29,9 @@ void WeaponThunder::update(float dt)
     if(_hud_skill) _hud_skill->setPercentage(_cool_down_timer / _cool_down);
 }
 
-void WeaponThunder::handleEvents(SDL_Event &event)
+bool WeaponThunder::handleEvents(SDL_Event &event)
 {
-    Weapon::handleEvents(event);
+    if(Weapon::handleEvents(event)) return true;
     if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
     {
         if (event.button.button == SDL_BUTTON_LEFT)
@@ -43,9 +43,11 @@ void WeaponThunder::handleEvents(SDL_Event &event)
                 auto pos = mainScene->screenToWorld(_game.getMousePosition());
                 auto spell = Spell::addSpellChild(mainScene, "assets/effect/Thunderstrike w blur.png", pos, 40.f, 3.f, Anchor::CENTER);
                 attack(pos, spell);
+                return true;
             }
         }
     }
+    return false;
 }
 
 
