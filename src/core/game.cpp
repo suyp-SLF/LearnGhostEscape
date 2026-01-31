@@ -561,6 +561,18 @@ void Game::drawHBar(const glm::vec2 &position, const glm::vec2 &size, float valu
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 }
 
+void Game::drawPoint(const std::vector<glm::vec2> &points, const glm::vec2 render_pos, glm::vec4 color)
+{
+    SDL_SetRenderDrawColorFloat(_renderer, color.r, color.g, color.b, color.a);
+    for(auto point : points)
+    {
+        auto x = point .x + render_pos.x;
+        auto y = point.y + render_pos.y;
+        SDL_RenderPoint(_renderer, x, y);
+    }
+    SDL_SetRenderDrawColorFloat(_renderer, 0, 0, 0, 1);
+}
+
 bool Game::isMouseInRect(const RectData &data)
 {
     return (_mouse_position.x >= data.position.x &&

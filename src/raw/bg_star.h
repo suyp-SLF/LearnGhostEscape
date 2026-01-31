@@ -21,7 +21,8 @@ protected:
     float _timer = 0;
     int _num = 1000;  //每一层的星星数量
 public:
-    virtual void update(float dt) override;
-    static BGStar* addBgStarChild(Object *parent, glm::vec2 size, Anchor anchor = Anchor::CENTER);
+    static BGStar* addBgStarChild(Object *parent, int num, float _far_scale, float _mid_scale, float _near_scale);
+    virtual void update (float dt) override;
+    virtual void render () override;
 };
 #endif // BG_STAR_H

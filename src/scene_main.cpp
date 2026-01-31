@@ -10,6 +10,7 @@
 #include "screen/hud_button.h"
 #include "scene_title.h"
 #include "raw/timer.h"
+#include "raw/bg_star.h"
 
 #include <fstream>
 
@@ -29,6 +30,8 @@ void SceneMain::init()
     _player->setPosition(_world_size / 2.0f);
     addChild(_player);
 
+    BGStar *bg_star = BGStar::addBgStarChild(this, 2000, 0.2, 0.5, 0.7); // 添加背景星星
+    
     _spawner = new Spawner();
     _spawner->init();
     _spawner->setTarget(_player);
