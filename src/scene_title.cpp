@@ -4,10 +4,12 @@
 #include "scene_main.h"
 
 #include <cmath>
+#include <fstream>
 
 void SceneTitle::init()
 {
     Scene::init();
+    loadData("assets/score.dat");
     SDL_ShowCursor();
     // BGM
     _game.playMusic("assets/bgm/Spooky music.mp3");
@@ -92,6 +94,18 @@ void SceneTitle::update(float dt)
     checkButtonStart();
     checkButtonCredits();
     Scene::update(dt);
+}
+
+void SceneTitle::loadData(const std::string &file_path)
+{
+    int score = 0;
+    std::ifstream file(file_path);
+    if (file.is_open())
+    {
+        file.read(reinterpret_cast<char *>(&score), sizeof(int));
+        file.close();
+    }
+    _game.setHighScore(score);
 }
 
 void SceneTitle::renderBackground()

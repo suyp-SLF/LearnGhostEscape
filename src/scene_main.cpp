@@ -11,6 +11,8 @@
 #include "scene_title.h"
 #include "raw/timer.h"
 
+#include <fstream>
+
 void SceneMain::init()
 {
     Scene::init();
@@ -84,6 +86,7 @@ void SceneMain::update(float dt)
             _game.setHighScore(_player->getScore());
         }
         _end_timer->start();
+        saveData("assets/score.dat");
     }
     checkEndTimer();
 }
@@ -97,6 +100,17 @@ void SceneMain::render()
 void SceneMain::clean()
 {
     Scene::clean(); // 父类clean
+}
+
+void SceneMain::saveData(const std::string &file_path)
+{
+    auto score = _game.getHighScore();
+    std::ofstream file(file_path, std::ios::binary);    //以二进制保存
+    if (file.is_open())
+    {
+        file.write(reinterpret_cast<const char *>(&score), sizeof(score));
+        file.close();
+    }
 }
 
 void SceneMain::renderBackground()
@@ -135,6 +149,12 @@ void SceneMain::checkBackButton()
 {
     if (_back_button->getIsTrigger())
     {
+        if (_player->getScore() > _game.getHighScore())
+        {
+            _game.setHighScore(_player->getScore());
+        }
+        saveData("assets/score.dat");
+        _player->setScore(0); // 重置得分
         _game.safeChangeScene(new SceneTitle());
     }
 }
@@ -143,6 +163,11 @@ void SceneMain::checkRestartButton()
 {
     if (_restart_button->getIsTrigger())
     {
+        if (_player->getScore() > _game.getHighScore())
+        {
+            _game.setHighScore(_player->getScore());
+        }
+        saveData("assets/score.dat");
         _player->setScore(0); // 重置得分
         _game.safeChangeScene(new SceneMain());
     }
@@ -153,6 +178,7 @@ void SceneMain::checkEndTimer()
     if (_end_timer->timerOut())
     {
         pause();
+        saveData("assets/score.dat");
         auto screen_size = _game.getScreenSize();
         _restart_button->setRenderPosition(screen_size / 2.f - glm::vec2(200, 0));
         _restart_button->setScale(4.f);

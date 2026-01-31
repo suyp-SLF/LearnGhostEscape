@@ -21,7 +21,7 @@ protected:
 public:
     static Sprite *addSpriteChild(ObjectScreen *parent, const std::string& texture_path, float scale = 1.f, Anchor anchor = Anchor::CENTER, glm::vec3 color = glm::vec3(1.f));
     Sprite() = default;
-    void setScale(float scale){ _size *= scale; }
+    void setScale(float scale);
     virtual void render() override;
     // GETTER AND SETTER
     // 图片

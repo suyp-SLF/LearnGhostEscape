@@ -33,6 +33,9 @@ public:
     // --添加,移除对象到场景中--
     virtual void addChild(Object *child) override;
     virtual void removeChild(Object *child) override;
+    // 保存与加载数据文件
+    virtual void saveData(const std::string &file_path) {};
+    virtual void loadData(const std::string &file_path) {};
     // --世界坐标转屏幕坐标,屏幕坐标转世界坐标--
     glm::vec2 worldToScreen(const glm::vec2 world_position) const;
     glm::vec2 screenToWorld(const glm::vec2 screen_position) const;

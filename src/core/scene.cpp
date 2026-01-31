@@ -8,9 +8,29 @@ bool Scene::handleEvents(SDL_Event &event)
     {
         return false;
     }
-    // 1. 基类处理（处理 _children 列表）
-    // 这一步会通过递归，自动分发事件给所有子节点（包括 World 和 Screen 对象）
-    if(Object::handleEvents(event)) return true;
+    for (auto &child : _children_world)
+    {
+        if (!child->getIsActive())
+        {
+            continue;
+        }
+        if (!_is_pause)
+        {
+            if (child->handleEvents(event))
+                return true;
+        }
+    }
+    for (auto &child : _children_screen)
+    {
+        if (!child->getIsActive())
+        {
+            continue;
+        }
+        if (child->handleEvents(event))
+            return true;
+    }
+    if (Object::handleEvents(event))
+        return true;
     return false;
 }
 
@@ -26,36 +46,52 @@ void Scene::update(float dt)
     if (!_is_active)
         return;
 
-    // 2. 关键：只调用一次基类 update。
-    // 这会处理所有子节点的逻辑，并安全地 delete 掉标记为 _is_delete 的对象。
-    Object::update(dt);
-
-    // 3. 同步 Scene 自己的辅助列表
-    // 注意：这里只负责从分类容器里移除指针，绝对不能调用 delete！
     for (auto it = _children_world.begin(); it != _children_world.end();)
     {
-        if ((*it)->getIsDelete())
+        auto child = *it;
+        if (child->getIsDelete())
         {
-            it = _children_world.erase(it); // 仅仅是移除索引
+            child->clean();
+            it = _children_world.erase(it);
+            SDL_Log("删除子节点：%s", _name.c_str());
+            delete child;
+            child = nullptr;
+        }
+        else if (child->getIsActive())
+        {
+            if (!_is_pause || child->getObjectType() == ObjectType::OBJECT_SCREEN)
+            {
+                (*it)->update(dt);
+            }
+            ++it;
         }
         else
         {
-            // 这里也不要再调 update 了，因为 Object::update 已经调过了
             ++it;
         }
     }
     for (auto it = _children_screen.begin(); it != _children_screen.end();)
     {
-        if ((*it)->getIsDelete())
+        auto child = *it;
+        if (child->getIsDelete())
         {
-            it = _children_screen.erase(it); // 仅仅是移除索引
+            child->clean();
+            it = _children_screen.erase(it);
+            SDL_Log("删除子节点：%s", _name.c_str());
+            delete child;
+            child = nullptr;
+        }
+        else if (child->getIsActive())
+        {
+            (*it)->update(dt);
+            ++it;
         }
         else
         {
-            // 这里也不要再调 update 了，因为 Object::update 已经调过了
             ++it;
         }
     }
+    Object::update(dt);
 }
 
 void Scene::render()
@@ -63,6 +99,21 @@ void Scene::render()
     // 打印调试信息
     if (!_is_active)
         return;
+    std::string renderOrder = this->_name + " Order: ";
+    for (auto &child : _children_world)
+    {
+        renderOrder += child->getName() + " ";
+        if (!child->getIsActive())
+            continue;
+        child->render();
+    }
+    for (auto &child : _children_screen)
+    {
+        renderOrder += child->getName() + " ";
+        if (!child->getIsActive())
+            continue;
+        child->render();
+    }
     Object::render();
     _game.drawText("Children:" + std::to_string(_children.size()) +
                        " World:" + std::to_string(_children_world.size()) +
@@ -107,7 +158,7 @@ void Scene::addChild(Object *child)
 
     // --- 关键修改：所有对象必须进入基类列表 ---
     // 这样 Object::handleEvents(event) 才能递归找到它们
-    _children.push_back(child);
+    // _children.push_back(child);
 
     switch (child->getObjectType())
     {
@@ -122,7 +173,6 @@ void Scene::addChild(Object *child)
         break;
     }
 }
-
 void Scene::removeChild(Object *child)
 {
     switch (child->getObjectType())
@@ -139,17 +189,14 @@ void Scene::removeChild(Object *child)
         break;
     }
 }
-
 glm::vec2 Scene::worldToScreen(const glm::vec2 world_position) const
 {
     return world_position - _camera_position;
 }
-
 glm::vec2 Scene::screenToWorld(const glm::vec2 screen_position) const
 {
     return screen_position + _camera_position;
 }
-
 // 屏幕组件，因为分为屏幕以及世界坐标，所以需要两个
 void Scene::setCameraPosition(const glm::vec2 camera_position)
 {

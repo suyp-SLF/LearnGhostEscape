@@ -19,6 +19,12 @@ Sprite *Sprite::addSpriteChild(ObjectScreen *parent, const std::string &texture_
     return sprite;
 }
 
+void Sprite::setScale(float scale)
+{
+    _size *= scale;
+    setOffsetByAnchor(_anchor);
+}
+
 void Sprite::render()
 {
     Object::render();

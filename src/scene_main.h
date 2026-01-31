@@ -36,6 +36,8 @@ public:
     virtual void update(float dt) override;
     virtual void render() override;
     virtual void clean() override; // 清理
+
+    virtual void saveData(const std::string &file_path) override;
 private:
     // 绘制背景图片
     void renderBackground();

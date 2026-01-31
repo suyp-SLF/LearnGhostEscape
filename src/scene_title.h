@@ -32,6 +32,7 @@ public:
     virtual bool handleEvents(SDL_Event &event) override;
     virtual void update(float dt) override;
 
+    virtual void loadData(const std::string &file_path) override;
 private:
     void renderBackground();
     void updateColor();
