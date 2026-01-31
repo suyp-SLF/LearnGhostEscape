@@ -49,7 +49,7 @@ private:
     Uint64 _frame_delay = 0;               // 帧间隔时间，单位纳秒
     float _dt = 0;                         // 时间间隔,单位秒
 
-    int _highscore = 0;
+    int _high_score = 0;
     // -- 游戏状态 --
     bool _is_running = true; // 游戏是否运行
 
@@ -90,8 +90,8 @@ public:
     glm::vec2 getMousePosition() const { return _mouse_position; }
     SDL_MouseButtonFlags getMouseButtonState() const { return _mouse_button_state; }
     TTF_Text *getTextVe() const { return _textVe; }
-    void setHighscore(int score) { _highscore = score; }
-    int getHighscore() const { return _highscore; }
+    void setHighScore(int score) { _high_score = score; }
+    int getHighScore() const { return _high_score; }
 
     // 随机数
     float randomFloat(float min, float max) { return std::uniform_real_distribution<float>(min, max)(_random_generator); }          // 生成一个[min, max)之间的随机浮点数

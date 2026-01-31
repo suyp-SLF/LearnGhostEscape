@@ -50,5 +50,7 @@ public:
     void setIsHover(bool is_hover) { _is_hover = is_hover; }
     void setIsPress(bool is_press) { _is_press = is_press; }
     void setIsTrigger(bool is_trigger) { _is_trigger = is_trigger; }
+
+    void setScale(float scale);
 };
 #endif // HUD_BUTTON_H

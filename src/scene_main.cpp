@@ -9,12 +9,28 @@
 #include "screen/hud_text.h"
 #include "screen/hud_button.h"
 #include "scene_title.h"
+#include "raw/timer.h"
 
 void SceneMain::init()
 {
     Scene::init();
     SDL_HideCursor();
 
+    _end_timer = Timer::addTimerChild(this, 3.0f);
+    // BGM
+    _game.playMusic("assets/bgm/OhMyGhost.ogg");
+    _world_size = _game.getScreenSize() * 3.0f; // 3 倍于屏幕大小
+    _camera_position = _world_size / 2.0f - _game.getScreenSize() / 2.0f;
+
+    _player = new Player();
+    _player->init();
+    _player->setPosition(_world_size / 2.0f);
+    addChild(_player);
+
+    _spawner = new Spawner();
+    _spawner->init();
+    _spawner->setTarget(_player);
+    addChild(_spawner);
     _hud_text_score = HUDText::addHUDTextChild(this,
                                                "得分: 0",
                                                glm::vec2(_game.getScreenSize().x - 250.f, 30.f),
@@ -42,19 +58,6 @@ void SceneMain::init()
                                                  "assets/UI/A_Pause3.png",
                                                  1.f,
                                                  Anchor::CENTER);
-    // BGM
-    _game.playMusic("assets/bgm/OhMyGhost.ogg");
-    _world_size = _game.getScreenSize() * 3.0f; // 3 倍于屏幕大小
-    _camera_position = _world_size / 2.0f - _game.getScreenSize() / 2.0f;
-    _player = new Player();
-    _player->init();
-    _player->setPosition(_world_size / 2.0f);
-    addChild(_player);
-
-    _spawner = new Spawner();
-    _spawner->init();
-    _spawner->setTarget(_player);
-    addChild(_spawner);
 
     _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER); // 添加鼠标
     _hud_stats = HUDStats::addHudStatsChild(this, _player, glm::vec2(30.f));                                 // 添加血条
@@ -74,6 +77,15 @@ void SceneMain::update(float dt)
     checkRestartButton();
     checkBackButton();
     checkPauseButton();
+    if (_player && !_player->getIsActive())
+    {
+        if (_player->getScore() > _game.getHighScore())
+        {
+            _game.setHighScore(_player->getScore());
+        }
+        _end_timer->start();
+    }
+    checkEndTimer();
 }
 
 void SceneMain::render()
@@ -131,6 +143,22 @@ void SceneMain::checkRestartButton()
 {
     if (_restart_button->getIsTrigger())
     {
+        _player->setScore(0); // 重置得分
         _game.safeChangeScene(new SceneMain());
+    }
+}
+
+void SceneMain::checkEndTimer()
+{
+    if (_end_timer->timerOut())
+    {
+        pause();
+        auto screen_size = _game.getScreenSize();
+        _restart_button->setRenderPosition(screen_size / 2.f - glm::vec2(200, 0));
+        _restart_button->setScale(4.f);
+        _back_button->setRenderPosition(screen_size / 2.f + glm::vec2(200, 0));
+        _back_button->setScale(4.f);
+        _pause_button->setActive(false);
+        _end_timer->stop(); // 停止计时器
     }
 }

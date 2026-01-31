@@ -4,7 +4,6 @@
 
 void Spawner::update(float dt)
 {
-    Object::update(dt);
     _spawn_timer += dt;
     if (_spawn_timer >= _spawn_time)
     {
@@ -21,4 +20,5 @@ void Spawner::update(float dt)
             Effect::addEffectChild(_game.getCurrentScene(), "assets/effect/184_3_.png", position, 1.f, enemy); // 添加特效
         }
     }
+    Object::update(dt);
 }

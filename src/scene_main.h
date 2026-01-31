@@ -10,6 +10,7 @@ class Player;
 class Spawner;
 class HUDText;
 class HUDButton;
+class Timer;
 class SceneMain : public Scene
 {
 private:
@@ -24,6 +25,8 @@ private:
     HUDButton *_restart_button = nullptr; // 退出按钮
 
     HUDText *_hud_text_score = nullptr; // 得分
+
+    Timer * _end_timer = nullptr; // 游戏结束计时器
 public:
     SceneMain() = default;
     virtual ~SceneMain() = default;
@@ -41,6 +44,7 @@ private:
     void checkPauseButton(); // 检查暂停按钮
     void checkBackButton(); // 检查恢复按钮
     void checkRestartButton(); // 检查重新开始按钮
+    void checkEndTimer(); // 检查游戏结束计时器
 };
 
 #endif // SCENE_MAIN_H

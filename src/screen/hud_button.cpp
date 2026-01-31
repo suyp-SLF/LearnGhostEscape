@@ -100,3 +100,12 @@ bool HUDButton::getIsTrigger()
     }
     return false; // 必须明确返回 false
 }
+
+void HUDButton::setScale(float scale)
+{
+    _normal_sprite->setScale(scale);
+    _hover_sprite->setScale(scale);
+    _press_sprite->setScale(scale);
+    _rect.position = getRenderPosition() + _normal_sprite->getOffset();;
+    _rect.size = _normal_sprite->getSize();
+}

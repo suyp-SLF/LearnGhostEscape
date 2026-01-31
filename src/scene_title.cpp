@@ -20,7 +20,7 @@ void SceneTitle::init()
                              size,
                              "assets/font/VonwaonBitmap-16px.ttf",
                              64);
-    auto _score_text = "最高分：" + std::to_string(_game.getHighscore());
+    auto _score_text = "最高分：" + std::to_string(_game.getHighScore());
     HUDText::addHUDTextChild(this,
                              _score_text,
                              screen_size / 2.f + glm::vec2(0, 100),

@@ -60,6 +60,7 @@ add_executable(
 
     src/raw/stats.cpp
     src/raw/weapon.cpp
+    src/raw/timer.cpp
 
     src/world/effect.cpp
     src/world/spell.cpp
