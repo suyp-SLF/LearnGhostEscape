@@ -96,6 +96,8 @@ bool HUDButton::getIsTrigger()
 {
     if (_is_trigger) {
         _is_trigger = false; // 消费掉这个触发信号
+        _is_press = false;
+        _is_hover = false;
         return true;
     }
     return false; // 必须明确返回 false

@@ -97,6 +97,8 @@ void Object::clean()
     for (auto &child : _children)
     {
         child->clean();
+        delete child;
+        child = nullptr;
     }
     _children.clear();
 }

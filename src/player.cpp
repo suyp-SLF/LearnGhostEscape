@@ -15,7 +15,8 @@ void Player::init()
 
     _collider = Collider::addColliderChild(this, _sprite_idle->getSize() / 2.f, Anchor::CENTER);
     _stats = Stats::addStatsChild(this);
-    _effect = Effect::addEffectChild(nullptr, "assets/effect/1764.png", glm::vec2(0), 1.0f);
+    _effect = Effect::addEffectChild(_game.getCurrentScene(), "assets/effect/1764.png", glm::vec2(0), 1.0f);
+    _effect->setActive(false);
     _weapon_thunder = WeaponThunder::addWeaponThunderChild(this, 2.f, 40.f);
 }
 
@@ -113,7 +114,7 @@ void Player::checkIsDead()
 {
     if (!_stats->getIsAlive())
     {
-        _game.getCurrentScene()->safeAddChild(_effect);
+        _effect->setActive(true);
         _effect->setPosition(_position);
         setActive(false);
         _game.playSoundEffect("assets/sound/female-scream-02-89290.mp3");

@@ -58,9 +58,13 @@ void SceneTitle::init()
                                              _game.getScreenSize() / 2.f,
                                              glm::vec2(0, 0));
     _credits_text->setActive(false);
-    UIMouse::addUIMouseChild(this, "assets/UI/pointer_c_shaded.png", "assets/UI/pointer_c_shaded.png", 1.f, Anchor::TOP_LEFT);
+    _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/pointer_c_shaded.png", "assets/UI/pointer_c_shaded.png", 1.f, Anchor::TOP_LEFT);
 }
 
+/**
+ * 渲染场景标题界面的函数
+ * 该函数负责渲染场景标题界面的所有可见元素
+ */
 void SceneTitle::render()
 {
     renderBackground();
@@ -90,6 +94,7 @@ void SceneTitle::update(float dt)
     updateColor();
     if (_credits_text->getIsActive())
     {
+        _ui_mouse->update(dt);
         return;
     }
     checkButtonQuit();

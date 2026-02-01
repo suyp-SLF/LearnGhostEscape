@@ -129,12 +129,16 @@ void Scene::clean()
     for (auto &child : _children_world)
     {
         child->clean(); // ❌ 报错：child 已经是野指针
+        delete child;
+        child = nullptr;
     }
     _children_world.clear();
 
     for (auto &child : _children_screen)
     {
         child->clean(); // ❌ 报错：child 已经是野指针
+        delete child;
+        child = nullptr;
     }
     _children_screen.clear();
 }

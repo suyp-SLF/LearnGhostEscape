@@ -21,6 +21,17 @@ void Effect::update(float dt)
     checkFinish();
 }
 
+void Effect::clean()
+{
+    ObjectWorld::clean();
+    if(_next_object)
+    {
+        _next_object->clean();
+        delete _next_object;
+        _next_object = nullptr;
+    }
+}
+
 void Effect::checkFinish()
 {
     if (_anim->getIsFinish())
@@ -29,6 +40,7 @@ void Effect::checkFinish()
         if (_next_object != nullptr)
         {
             _game.getCurrentScene()->safeAddChild(_next_object);
+            _next_object = nullptr;
         }
     }
 }

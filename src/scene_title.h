@@ -14,6 +14,7 @@
 // 这是一个用于游戏界面中按钮功能的类
 class HUDText;
 class HUDButton;
+class UIMouse;
 class SceneTitle : public Scene // 继承自Scene基类
 {
 protected:
@@ -24,6 +25,7 @@ protected:
     HUDButton *_credits_button = nullptr;
     HUDText *_credits_text = nullptr;
 
+    UIMouse *_ui_mouse = nullptr;
 public:
     SceneTitle() = default;
     virtual ~SceneTitle() = default;

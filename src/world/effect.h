@@ -11,6 +11,7 @@ class Effect : public ObjectWorld
 public:
     static Effect *addEffectChild(Object *parent, const std::string& file_path, glm::vec2 position, float scale = 1.f, ObjectWorld *next_object = nullptr);
     virtual void update(float dt) override;
+    virtual void clean() override;
     
     void checkFinish();
 
