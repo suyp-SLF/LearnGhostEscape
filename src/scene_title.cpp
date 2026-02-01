@@ -2,6 +2,7 @@
 #include "screen/hud_text.h"
 #include "screen/hud_button.h"
 #include "scene_main.h"
+#include "screen/ui_mouse.h"
 
 #include <cmath>
 #include <fstream>
@@ -57,6 +58,7 @@ void SceneTitle::init()
                                              _game.getScreenSize() / 2.f,
                                              glm::vec2(0, 0));
     _credits_text->setActive(false);
+    UIMouse::addUIMouseChild(this, "assets/UI/pointer_c_shaded.png", "assets/UI/pointer_c_shaded.png", 1.f, Anchor::TOP_LEFT);
 }
 
 void SceneTitle::render()

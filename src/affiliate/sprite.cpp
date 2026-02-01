@@ -13,9 +13,12 @@ Sprite *Sprite::addSpriteChild(ObjectScreen *parent, const std::string &texture_
     sprite->setTexture(Texture(texture_path));
     sprite->setScale(scale);
     sprite->setOffsetByAnchor(anchor);
-    sprite->setParent(parent);
     sprite->setColor(color);
-    parent->safeAddChild(sprite);
+    if (parent)
+    {
+        sprite->setParent(parent);
+        parent->safeAddChild(sprite);
+    }
     return sprite;
 }
 

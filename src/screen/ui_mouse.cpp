@@ -38,8 +38,8 @@ UIMouse *UIMouse::addUIMouseChild(Object *parent, const std::string &normal1, co
     ui_mouse->_normal1 = Sprite::addSpriteChild(ui_mouse, normal1, scale, anchor);
     ui_mouse->_normal2 = Sprite::addSpriteChild(ui_mouse, normal2, scale, anchor);
     // 强制初始化状态，防止第一帧两个都消失
-    ui_mouse->_normal1->setActive(true);
-    ui_mouse->_normal2->setActive(false);
+    // ui_mouse->_normal1->setActive(true);
+    // ui_mouse->_normal2->setActive(false);
     ui_mouse->_timer = 0.0f;
     if (parent) parent->safeAddChild(ui_mouse);
     return ui_mouse;

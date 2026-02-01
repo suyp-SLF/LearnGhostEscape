@@ -192,7 +192,7 @@ bool Game::handleEvents()
 
 void Game::update(float dt)
 {
-    _mouse_button_state = SDL_GetMouseState(&_mouse_position.x, &_mouse_position.y);
+    updateMouse();
     // 更新
     if (_text)
     {
@@ -564,9 +564,9 @@ void Game::drawHBar(const glm::vec2 &position, const glm::vec2 &size, float valu
 void Game::drawPoint(const std::vector<glm::vec2> &points, const glm::vec2 render_pos, glm::vec4 color)
 {
     SDL_SetRenderDrawColorFloat(_renderer, color.r, color.g, color.b, color.a);
-    for(auto point : points)
+    for (auto point : points)
     {
-        auto x = point .x + render_pos.x;
+        auto x = point.x + render_pos.x;
         auto y = point.y + render_pos.y;
         SDL_RenderPoint(_renderer, x, y);
     }
@@ -596,4 +596,23 @@ std::string Game::loadTextFile(const std::string &path)
         text += line + "\n";
     }
     return text;
+}
+
+void Game::updateMouse()
+{
+    // 限制画面比例
+    SDL_SetWindowAspectRatio(_window, _screen_size.x / _screen_size.y, _screen_size.x / _screen_size.y);
+    float rawX, rawY;
+    // 获取鼠标在窗口中的原始像素位置
+    _mouse_button_state = SDL_GetMouseState(&rawX, &rawY);
+
+    // 将窗口原始坐标转换为渲染器的逻辑坐标
+    // 结果会自动存入 _mouse_position.x 和 .y
+    SDL_RenderCoordinatesFromWindow(
+        _renderer, 
+        rawX, 
+        rawY, 
+        &_mouse_position.x, 
+        &_mouse_position.y
+    );
 }

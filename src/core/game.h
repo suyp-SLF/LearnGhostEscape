@@ -125,5 +125,7 @@ public:
     bool isMouseInRect(const RectData &data);
     // 读取文件
     std::string loadTextFile(const std::string &path);
+private:
+    void updateMouse();
 };
 #endif // GAME_H

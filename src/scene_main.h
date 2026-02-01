@@ -47,6 +47,8 @@ private:
     void checkBackButton(); // 检查恢复按钮
     void checkRestartButton(); // 检查重新开始按钮
     void checkEndTimer(); // 检查游戏结束计时器
+
+    void checkSlowDown(float &dt); // 检查减速
 };
 
 #endif // SCENE_MAIN_H
