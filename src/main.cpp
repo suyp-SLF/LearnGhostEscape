@@ -3,7 +3,7 @@
 
 int main(int, char **)
 {
-   Game &game = Game::GetInstance();
+   Game &game = Game::getInstance();
    game.init("LearnGhostEscape", 1280, 720);
    game.run();
    return 0;

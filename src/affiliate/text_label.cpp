@@ -39,7 +39,7 @@ TextLabel *TextLabel::addTextLabelChild(ObjectScreen *parent, const std::string 
 void TextLabel::setFontPath(const std::string &font_path)
 {
     _font_path = font_path;
-    auto font = _game.getAssetStore()->getFont(_font_path, _font_size);
+    auto font = Game::getInstance().getAssetStore()->getFont(_font_path, _font_size);
     TTF_SetTextFont(_ttf_text, font);
     updateSize();
 }
@@ -47,7 +47,7 @@ void TextLabel::setFontPath(const std::string &font_path)
 void TextLabel::setFontSize(int font_size)
 {
     _font_size = font_size;
-    auto font = _game.getAssetStore()->getFont(_font_path, _font_size);
+    auto font = Game::getInstance().getAssetStore()->getFont(_font_path, _font_size);
     TTF_SetTextFont(_ttf_text, font);
     updateSize();
 }
@@ -62,9 +62,9 @@ void TextLabel::setFont(const std::string &font_path, int font_size)
 {
     _font_path = font_path;
     _font_size = font_size;
-    auto font = _game.getAssetStore()->getFont(font_path, _font_size);
+    auto font = Game::getInstance().getAssetStore()->getFont(font_path, _font_size);
     TTF_SetTextFont(_ttf_text, font);
-    _ttf_text = _game.createTTFText("", _font_path, _font_size);
+    _ttf_text = Game::getInstance().createTTFText("", _font_path, _font_size);
     updateSize();
 }
 

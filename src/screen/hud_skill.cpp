@@ -13,7 +13,7 @@ HUDSkill *HUDSkill::addHudSkillChild(Object *parent, const std::string &file_pat
 
 void HUDSkill::render()
 {
-    _game.drawImage(_icon->getTexture(),getRenderPosition() + _icon->getOffset(), _icon->getSize(), glm::vec2(1.f, 1.f), 1.f);
+    Game::getInstance().drawImage(_icon->getTexture(),getRenderPosition() + _icon->getOffset(), _icon->getSize(), glm::vec2(1.f, 1.f), 1.f);
     ObjectScreen::render();
 }
 

@@ -8,7 +8,7 @@ void Collider::render()
     //输出_parent->getRenderPosition()
     // 调试模式，渲染碰撞箱
     auto texture = Texture("assets/UI/circle.png");
-    _game.drawImage(texture, _parent->getRenderPosition() + _offset, _size, glm::vec2(1), 0.3f);
+    Game::getInstance().drawImage(texture, _parent->getRenderPosition() + _offset, _size, glm::vec2(1), 0.3f);
     #endif
 }
 

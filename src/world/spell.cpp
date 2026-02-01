@@ -34,7 +34,7 @@ void Spell::attack()
     // 1. 如果法术自己已经标记删除，直接跳过逻辑
     if (this->getIsDelete()) return;
 
-    auto scene = _game.getCurrentScene();
+    auto scene = Game::getInstance().getCurrentScene();
     if (!scene) return;
 
     auto& objects = scene->getChildrenWorld();

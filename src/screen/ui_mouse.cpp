@@ -21,14 +21,14 @@ void UIMouse::update(float dt)
     {
         _timer = 0.0f;
     }
-    setRenderPosition(_game.getMousePosition()); // update position
+    setRenderPosition(Game::getInstance().getMousePosition()); // update position
 }
 
 void UIMouse::render()
 {
     ObjectScreen::render();
     //SDL_Log("Mouse Pos: %f, %f", getRenderPosition().x, getRenderPosition().y); // 取消注释查看坐标是否正常
-    _game.drawBoundary(getRenderPosition(), getRenderPosition(), 5.0f, {1.0, 0.0, 0.0, 1.0});
+    Game::getInstance().drawBoundary(getRenderPosition(), getRenderPosition(), 5.0f, {1.0, 0.0, 0.0, 1.0});
 }
 
 UIMouse *UIMouse::addUIMouseChild(Object *parent, const std::string &normal1, const std::string &normal2, float scale, Anchor anchor)

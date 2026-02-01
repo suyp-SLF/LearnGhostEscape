@@ -18,8 +18,8 @@ WeaponThunder *WeaponThunder::addWeaponThunderChild(Actor *parent, float cool_do
 void WeaponThunder::init()
 {
     Weapon::init();
-    auto mainScene = _game.getCurrentScene();
-    auto position = glm::vec2(_game.getScreenSize().x - 100.f, 30.f);
+    auto mainScene = Game::getInstance().getCurrentScene();
+    auto position = glm::vec2(Game::getInstance().getScreenSize().x - 100.f, 30.f);
     _hud_skill = HUDSkill::addHudSkillChild(mainScene, "assets/UI/Electric-Icon.png", position, .1f, Anchor::CENTER);
 }
 
@@ -38,9 +38,9 @@ bool WeaponThunder::handleEvents(SDL_Event &event)
         {
             if (canAttack())
             {
-                _game.playSoundEffect("assets/sound/big-thunder.mp3");
-                Scene *mainScene = _game.getCurrentScene();
-                auto pos = mainScene->screenToWorld(_game.getMousePosition());
+                Game::getInstance().playSoundEffect("assets/sound/big-thunder.mp3");
+                Scene *mainScene = Game::getInstance().getCurrentScene();
+                auto pos = mainScene->screenToWorld(Game::getInstance().getMousePosition());
                 auto spell = Spell::addSpellChild(mainScene, "assets/effect/Thunderstrike w blur.png", pos, 40.f, 3.f, Anchor::CENTER);
                 attack(pos, spell);
                 return true;

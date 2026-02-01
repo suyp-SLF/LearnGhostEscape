@@ -66,7 +66,7 @@ public:
     // -- 参数 --
 
     // -- 获取单例实例 --
-    static Game &GetInstance()
+    static Game &getInstance() //C++11推荐的单例模式
     {
         static Game instance;
         return instance;

@@ -21,16 +21,16 @@ void SceneMain::init()
 
     _end_timer = Timer::addTimerChild(this, 3.0f);
     // BGM
-    _game.playMusic("assets/bgm/OhMyGhost.ogg");
-    _world_size = _game.getScreenSize() * 3.0f; // 3 倍于屏幕大小
-    _camera_position = _world_size / 2.0f - _game.getScreenSize() / 2.0f;
+    Game::getInstance().playMusic("assets/bgm/OhMyGhost.ogg");
+    _world_size = Game::getInstance().getScreenSize() * 3.0f; // 3 倍于屏幕大小
+    _camera_position = _world_size / 2.0f - Game::getInstance().getScreenSize() / 2.0f;
 
     _player = new Player();
     _player->init();
     _player->setPosition(_world_size / 2.0f);
     addChild(_player);
 
-    BGStar *bg_star = BGStar::addBgStarChild(this, 2000, 0.2, 0.5, 0.7); // 添加背景星星
+    _bg_star = BGStar::addBgStarChild(this, 2000, 0.2, 0.5, 0.7); // 添加背景星星
     
     _spawner = new Spawner();
     _spawner->init();
@@ -38,11 +38,11 @@ void SceneMain::init()
     addChild(_spawner);
     _hud_text_score = HUDText::addHUDTextChild(this,
                                                "得分: 0",
-                                               glm::vec2(_game.getScreenSize().x - 250.f, 30.f),
+                                               glm::vec2(Game::getInstance().getScreenSize().x - 250.f, 30.f),
                                                glm::vec2(100, 50)); // 添加得分文本
 
     _restart_button = HUDButton::addHUDButtonChild(this,
-                                                   _game.getScreenSize() - glm::vec2(230, 30),
+                                                   Game::getInstance().getScreenSize() - glm::vec2(230, 30),
                                                    "assets/UI/A_Restart1.png",
                                                    "assets/UI/A_Restart2.png",
                                                    "assets/UI/A_Restart3.png",
@@ -50,14 +50,14 @@ void SceneMain::init()
                                                    Anchor::CENTER);
 
     _back_button = HUDButton::addHUDButtonChild(this,
-                                                _game.getScreenSize() - glm::vec2(140, 30),
+                                                Game::getInstance().getScreenSize() - glm::vec2(140, 30),
                                                 "assets/UI/A_Back1.png",
                                                 "assets/UI/A_Back2.png",
                                                 "assets/UI/A_Back3.png",
                                                 1.f,
                                                 Anchor::CENTER);
     _pause_button = HUDButton::addHUDButtonChild(this,
-                                                 _game.getScreenSize() - glm::vec2(50, 30),
+                                                 Game::getInstance().getScreenSize() - glm::vec2(50, 30),
                                                  "assets/UI/A_Pause1.png",
                                                  "assets/UI/A_Pause2.png",
                                                  "assets/UI/A_Pause3.png",
@@ -85,9 +85,9 @@ void SceneMain::update(float dt)
     checkPauseButton();
     if (_player && !_player->getIsActive())
     {
-        if (_player->getScore() > _game.getHighScore())
+        if (_player->getScore() > Game::getInstance().getHighScore())
         {
-            _game.setHighScore(_player->getScore());
+            Game::getInstance().setHighScore(_player->getScore());
         }
         _end_timer->start();
         saveData("assets/score.dat");
@@ -108,7 +108,7 @@ void SceneMain::clean()
 
 void SceneMain::saveData(const std::string &file_path)
 {
-    auto score = _game.getHighScore();
+    auto score = Game::getInstance().getHighScore();
     std::ofstream file(file_path, std::ios::binary);    //以二进制保存
     if (file.is_open())
     {
@@ -121,8 +121,8 @@ void SceneMain::renderBackground()
 {
     auto start = -_camera_position;
     auto end = _world_size - _camera_position;
-    _game.drawGrid(start, end, 80.0f, glm::vec2(0), {0.5, 0.5, 0.5, 1.0});
-    _game.drawBoundary(start, end, 4.0, {1.0, 1.0, 1.0, 1.0});
+    Game::getInstance().drawGrid(start, end, 80.0f, glm::vec2(0), {0.5, 0.5, 0.5, 1.0});
+    Game::getInstance().drawBoundary(start, end, 4.0, {1.0, 1.0, 1.0, 1.0});
 }
 
 void SceneMain::updateScore()
@@ -137,14 +137,14 @@ void SceneMain::checkPauseButton()
         if (_is_pause)
         {
             _is_pause = false;
-            _game.resumeMusic();
-            _game.resumeAllSoundEffects();
+            Game::getInstance().resumeMusic();
+            Game::getInstance().resumeAllSoundEffects();
         }
         else
         {
             _is_pause = true;
-            _game.pauseMusic();
-            _game.pauseAllSoundEffects();
+            Game::getInstance().pauseMusic();
+            Game::getInstance().pauseAllSoundEffects();
         }
     }
 }
@@ -153,13 +153,13 @@ void SceneMain::checkBackButton()
 {
     if (_back_button->getIsTrigger())
     {
-        if (_player->getScore() > _game.getHighScore())
+        if (_player->getScore() > Game::getInstance().getHighScore())
         {
-            _game.setHighScore(_player->getScore());
+            Game::getInstance().setHighScore(_player->getScore());
         }
         saveData("assets/score.dat");
         _player->setScore(0); // 重置得分
-        _game.safeChangeScene(new SceneTitle());
+        Game::getInstance().safeChangeScene(new SceneTitle());
     }
 }
 
@@ -167,13 +167,13 @@ void SceneMain::checkRestartButton()
 {
     if (_restart_button->getIsTrigger())
     {
-        if (_player->getScore() > _game.getHighScore())
+        if (_player->getScore() > Game::getInstance().getHighScore())
         {
-            _game.setHighScore(_player->getScore());
+            Game::getInstance().setHighScore(_player->getScore());
         }
         saveData("assets/score.dat");
         _player->setScore(0); // 重置得分
-        _game.safeChangeScene(new SceneMain());
+        Game::getInstance().safeChangeScene(new SceneMain());
     }
 }
 
@@ -183,7 +183,7 @@ void SceneMain::checkEndTimer()
     {
         pause();
         saveData("assets/score.dat");
-        auto screen_size = _game.getScreenSize();
+        auto screen_size = Game::getInstance().getScreenSize();
         _restart_button->setRenderPosition(screen_size / 2.f - glm::vec2(200, 0));
         _restart_button->setScale(4.f);
         _back_button->setRenderPosition(screen_size / 2.f + glm::vec2(200, 0));
@@ -196,7 +196,7 @@ void SceneMain::checkEndTimer()
 void SceneMain::checkSlowDown(float &dt)
 {
     // 右键鼠标
-    if(_game.getMouseButtonState() & SDL_BUTTON_RMASK)
+    if(Game::getInstance().getMouseButtonState() & SDL_BUTTON_RMASK)
     {
         dt *= 0.4f;
     }

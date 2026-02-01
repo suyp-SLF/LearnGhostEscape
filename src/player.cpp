@@ -2,6 +2,8 @@
 #include "core/scene.h"
 #include "affiliate/sprite_anim.h"
 #include "raw/stats.h"
+#include "move_control_wasd.h"
+#include "move_control_arrow.h"
 
 #include <SDL3/SDL.h>
 
@@ -15,14 +17,32 @@ void Player::init()
 
     _collider = Collider::addColliderChild(this, _sprite_idle->getSize() / 2.f, Anchor::CENTER);
     _stats = Stats::addStatsChild(this);
-    _effect = Effect::addEffectChild(_game.getCurrentScene(), "assets/effect/1764.png", glm::vec2(0), 1.0f);
+    _effect = Effect::addEffectChild(Game::getInstance().getCurrentScene(), "assets/effect/1764.png", glm::vec2(0), 1.0f);
     _effect->setActive(false);
     _weapon_thunder = WeaponThunder::addWeaponThunderChild(this, 2.f, 40.f);
+
+    _move_control = new MoveControlWASD();
+    safeAddChild(_move_control);
 }
 
 bool Player::handleEvents(SDL_Event &event)
 {
-    if(Actor::handleEvents(event)) return true;
+    if (Actor::handleEvents(event))
+        return true;
+    // 按C键，切换移动控制
+    if (event.type == SDL_EVENT_KEY_DOWN)
+    {
+        if(event.key.scancode == SDL_SCANCODE_C)
+        {
+            setMoveControl(new MoveControlWASD());
+            return true;
+        }
+        if(event.key.scancode == SDL_SCANCODE_V)
+        {
+            setMoveControl(new MoveControlArrow());
+            return true;
+        }
+    }
     return false;
 }
 
@@ -30,7 +50,7 @@ void Player::update(float dt)
 {
     Actor::update(dt);
     _velocity *= 0.9f;
-    keyboardControl();
+    moveControl();
     move(dt);
     syncCamera();
     checkState();
@@ -40,7 +60,7 @@ void Player::update(float dt)
 void Player::render()
 {
     Actor::render();
-    _game.drawBoundary(_render_position, _render_position, 5.0f, {1.0, 0.0, 0.0, 1.0});
+    Game::getInstance().drawBoundary(_render_position, _render_position, 5.0f, {1.0, 0.0, 0.0, 1.0});
 }
 
 void Player::clean()
@@ -53,28 +73,36 @@ int Player::takeDamage(int damage)
     int fin_damage = Actor::takeDamage(damage);
     if (fin_damage > 0)
     {
-        _game.playSoundEffect("assets/sound/hit-flesh-02-266309.mp3");
+        Game::getInstance().playSoundEffect("assets/sound/hit-flesh-02-266309.mp3");
     }
     return fin_damage;
 }
 
-void Player::keyboardControl()
+void Player::setMoveControl(MoveControl *move_control)
 {
-    auto currentKeyStates = SDL_GetKeyboardState(NULL);
-    if (currentKeyStates[SDL_SCANCODE_W])
+    if (_move_control != nullptr){
+        _move_control->setDelete(true); 
+    }
+    _move_control = move_control;
+    safeAddChild(move_control);
+}
+
+void Player::moveControl()
+{
+    if(_move_control == nullptr) return;
+    if (_move_control->isUp())
     {
         _velocity.y = -_max_speed;
     }
-    else if (currentKeyStates[SDL_SCANCODE_S])
+    if (_move_control->isDown())
     {
         _velocity.y = _max_speed;
     }
-
-    if (currentKeyStates[SDL_SCANCODE_A])
+    if (_move_control->isLeft())
     {
         _velocity.x = -_max_speed;
     }
-    else if (currentKeyStates[SDL_SCANCODE_D])
+    if (_move_control->isRight())
     {
         _velocity.x = _max_speed;
     }
@@ -82,7 +110,7 @@ void Player::keyboardControl()
 
 void Player::syncCamera()
 {
-    _game.getCurrentScene()->setCameraPosition(_position - _game.getScreenSize() / 2.0f);
+    Game::getInstance().getCurrentScene()->setCameraPosition(_position - Game::getInstance().getScreenSize() / 2.0f);
 }
 
 void Player::checkState()
@@ -117,6 +145,6 @@ void Player::checkIsDead()
         _effect->setActive(true);
         _effect->setPosition(_position);
         setActive(false);
-        _game.playSoundEffect("assets/sound/female-scream-02-89290.mp3");
+        Game::getInstance().playSoundEffect("assets/sound/female-scream-02-89290.mp3");
     }
 }

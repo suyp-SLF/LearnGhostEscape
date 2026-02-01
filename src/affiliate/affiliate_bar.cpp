@@ -20,19 +20,19 @@ void AffiliateBar::render()
     auto position = _parent->getRenderPosition() + _offset;
     if (_percentage > .7f)
     {
-        _game.drawHBar(position, _size, _percentage, _color_high);
+        Game::getInstance().drawHBar(position, _size, _percentage, _color_high);
     }
     else if (_percentage > .3f)
     {
-        _game.drawHBar(position, _size, _percentage, _color_mid);
+        Game::getInstance().drawHBar(position, _size, _percentage, _color_mid);
     }
     else
     {
-        _game.drawHBar(position, _size, _percentage, _color_low);
+        Game::getInstance().drawHBar(position, _size, _percentage, _color_low);
     }
 
 #ifdef DEBUG_MDOE
     // 血量
-    _game.drawText(std::to_string(_percentage), position + glm::vec2(0, 10), glm::vec4(1));
+    Game::getInstance().drawText(std::to_string(_percentage), position + glm::vec2(0, 10), glm::vec4(1));
 #endif
 }

@@ -64,11 +64,11 @@ void HUDButton::checkState()
         // --- 核心逻辑：触发悬停音效 ---
         if (next_state == State::HOVER && _current_state == State::NORMAL) {
             // 当从 NORMAL 变成 HOVER 的瞬间播放
-            _game.playSoundEffect("assets/sound/UI_button12.wav"); 
+            Game::getInstance().playSoundEffect("assets/sound/UI_button12.wav"); 
         }
         if( next_state == State::PRESS && _current_state == State::HOVER) {
             // 当从 HOVER 变成 PRESS 的瞬间播放
-            _game.playSoundEffect("assets/sound/UI_button08.wav");
+            Game::getInstance().playSoundEffect("assets/sound/UI_button08.wav");
         }
         // ---------------------------
 
@@ -88,7 +88,7 @@ void HUDButton::checkHover()
     //_rect.size = _normal_sprite->getSize();
 
     // 更新布尔值，供 checkState 使用
-    _is_hover = _game.isMouseInRect(_rect);
+    _is_hover = Game::getInstance().isMouseInRect(_rect);
     SDL_Log(_is_hover ? "hover" : "not hover");
 }
 

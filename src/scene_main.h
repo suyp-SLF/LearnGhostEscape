@@ -10,6 +10,7 @@ class Player;
 class Spawner;
 class HUDText;
 class HUDButton;
+class BGStar;
 class Timer;
 class SceneMain : public Scene
 {
@@ -19,6 +20,7 @@ private:
     Spawner *_spawner = nullptr;    // 敌人生成器
     UIMouse *_ui_mouse = nullptr;   // 鼠标
     HUDStats *_hud_stats = nullptr; // 状态栏
+    BGStar *_bg_star = nullptr; // 背景星星
 
     HUDButton *_pause_button = nullptr; // 暂停按钮
     HUDButton *_back_button = nullptr; // 恢复按钮

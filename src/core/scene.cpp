@@ -115,7 +115,7 @@ void Scene::render()
         child->render();
     }
     Object::render();
-    _game.drawText("Children:" + std::to_string(_children.size()) +
+    Game::getInstance().drawText("Children:" + std::to_string(_children.size()) +
                        " World:" + std::to_string(_children_world.size()) +
                        " Screen:" + std::to_string(_children_screen.size()),
                    glm::vec2(10.0f, 40.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
@@ -146,13 +146,13 @@ void Scene::clean()
 void Scene::pause()
 {
     _is_pause = true;
-    _game.pauseMusic();
+    Game::getInstance().pauseMusic();
 }
 
 void Scene::resume()
 {
     _is_pause = false;
-    _game.resumeMusic();
+    Game::getInstance().resumeMusic();
 }
 
 void Scene::addChild(Object *child)
@@ -168,6 +168,7 @@ void Scene::addChild(Object *child)
     {
     case ObjectType::NONE:
         _children.push_back(child);
+        break;
     case ObjectType::OBJECT_WORLD:
     case ObjectType::ENEMY:
         _children_world.push_back(static_cast<ObjectWorld *>(child));
@@ -209,5 +210,5 @@ void Scene::setCameraPosition(const glm::vec2 camera_position)
     _camera_position = glm::clamp(
         _camera_position,
         glm::vec2(-30),
-        _world_size - _game.getScreenSize() + glm::vec2(30));
+        _world_size - Game::getInstance().getScreenSize() + glm::vec2(30));
 }

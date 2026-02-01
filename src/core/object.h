@@ -12,7 +12,6 @@ protected:
     std::string _name;
     std::string _source_path;
     ObjectType _type = ObjectType::NONE;
-    Game &_game = Game::GetInstance();
     std::vector<Object *> _children_wait_to_add; // 子对象
     std::vector<Object *> _children; // 子对象
     bool _is_active = true; // 是否激活

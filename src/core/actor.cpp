@@ -15,7 +15,7 @@ void Actor::update(float dt)
 void Actor::move(float dt)
 {
     setPosition(_position + _velocity * dt);
-    _position = glm::clamp(_position, glm::vec2(0.0f), _game.getCurrentScene()->getWorldSize());
+    _position = glm::clamp(_position, glm::vec2(0.0f), Game::getInstance().getCurrentScene()->getWorldSize());
 }
 
 void Actor::getIsAlive()

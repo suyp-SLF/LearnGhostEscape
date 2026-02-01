@@ -2,7 +2,7 @@
 
 Texture::Texture(const std::string &file_path)
 {
-    texture = Game::GetInstance().getAssetStore()->getTexture(file_path);
+    texture = Game::getInstance().getAssetStore()->getTexture(file_path);
     SDL_GetTextureSize(texture, &src_rect.w, &src_rect.h);
 }
 
@@ -36,10 +36,10 @@ void Sprite::render()
         return;
     }
     auto pos = _parent->getRenderPosition() + _offset;
-    _game.drawImage(_texture, pos, _size, _percentage, 1.f, _color);
+    Game::getInstance().drawImage(_texture, pos, _size, _percentage, 1.f, _color);
 #ifdef DEBUG_MDOE
     // 碰撞箱
-    _game.drawBoundary(_parent->getRenderPosition() + _offset, _parent->getRenderPosition() + _offset + _size, 1, {255, 255, 255, 255});
+    Game::getInstance().drawBoundary(_parent->getRenderPosition() + _offset, _parent->getRenderPosition() + _offset + _size, 1, {255, 255, 255, 255});
 #endif
 }
 

@@ -44,7 +44,7 @@ void Enemy::update(float dt)
 void Enemy::render()
 {
     Actor::render();
-    _game.drawBoundary(_render_position, _render_position, 5.0f, {1.0, 0.0, 0.0, 1.0});
+    Game::getInstance().drawBoundary(_render_position, _render_position, 5.0f, {1.0, 0.0, 0.0, 1.0});
 }
 
 void Enemy::clean()

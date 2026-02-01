@@ -10,12 +10,12 @@ BGStar *BGStar::addBgStarChild(Object *parent, int num, float _far_scale, float 
     bg_star->_far_star.reserve(num); // 预分配内存
     bg_star->_mid_star.reserve(num);
     bg_star->_near_star.reserve(num);
-    auto extra = Game::GetInstance().getCurrentScene()->getWorldSize() - Game::GetInstance().getScreenSize();
+    auto extra = Game::getInstance().getCurrentScene()->getWorldSize() - Game::getInstance().getScreenSize();
     for (int i = 0; i < num; i++)
     {
-        bg_star->_far_star.push_back(Game::GetInstance().randomVec2(glm::vec2(0), Game::GetInstance().getScreenSize() + extra * _far_scale));
-        bg_star->_mid_star.push_back(Game::GetInstance().randomVec2(glm::vec2(0), Game::GetInstance().getScreenSize() + extra * _mid_scale));
-        bg_star->_near_star.push_back(Game::GetInstance().randomVec2(glm::vec2(0), Game::GetInstance().getScreenSize() + extra * _near_scale));
+        bg_star->_far_star.push_back(Game::getInstance().randomVec2(glm::vec2(0), Game::getInstance().getScreenSize() + extra * _far_scale));
+        bg_star->_mid_star.push_back(Game::getInstance().randomVec2(glm::vec2(0), Game::getInstance().getScreenSize() + extra * _mid_scale));
+        bg_star->_near_star.push_back(Game::getInstance().randomVec2(glm::vec2(0), Game::getInstance().getScreenSize() + extra * _near_scale));
     }
     if (parent) parent->addChild(bg_star);
     return bg_star;
@@ -31,8 +31,8 @@ void BGStar::update(float dt)
 
 void BGStar::render()
 {
-    auto pos = _game.getCurrentScene()->getCameraPosition();
-    _game.drawPoint(_far_star, -pos * _far_scale, _far_color);
-    _game.drawPoint(_mid_star, -pos * _mid_scale, _mid_color);
-    _game.drawPoint(_near_star, -pos * _near_scale, _near_color);
+    auto pos = Game::getInstance().getCurrentScene()->getCameraPosition();
+    Game::getInstance().drawPoint(_far_star, -pos * _far_scale, _far_color);
+    Game::getInstance().drawPoint(_mid_star, -pos * _mid_scale, _mid_color);
+    Game::getInstance().drawPoint(_near_star, -pos * _near_scale, _near_color);
 }

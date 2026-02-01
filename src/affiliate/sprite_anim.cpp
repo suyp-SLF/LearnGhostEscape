@@ -44,7 +44,7 @@ void SpriteAnim::render()
     Sprite::render();
 #ifdef DEBUG_MDOE
 //碰撞箱
-    _game.drawText(
+    Game::getInstance().drawText(
         // 获得类名
         std::to_string(_current_frame),
         _parent->getRenderPosition() + _offset,
