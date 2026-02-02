@@ -29,7 +29,7 @@ void WeaponThunder::update(float dt)
     if(_hud_skill) _hud_skill->setPercentage(_cool_down_timer / _cool_down);
 }
 
-bool WeaponThunder::handleEvents(SDL_Event &event)
+bool WeaponThunder::handleEvents(SDL_Event &event, )
 {
     if(Weapon::handleEvents(event)) return true;
     if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
@@ -38,11 +38,11 @@ bool WeaponThunder::handleEvents(SDL_Event &event)
         {
             if (canAttack())
             {
-                Game::getInstance().playSoundEffect("assets/sound/big-thunder.mp3");
-                Scene *mainScene = Game::getInstance().getCurrentScene();
-                auto pos = mainScene->screenToWorld(Game::getInstance().getMousePosition());
-                auto spell = Spell::addSpellChild(mainScene, "assets/effect/Thunderstrike w blur.png", pos, 40.f, 3.f, Anchor::CENTER);
-                attack(pos, spell);
+                // Game::getInstance().playSoundEffect("assets/sound/big-thunder.mp3");
+                // Scene *mainScene = Game::getInstance().getCurrentScene();
+                // auto pos = mainScene->screenToWorld(Game::getInstance().getMousePosition());
+                // auto spell = Spell::addSpellChild(mainScene, "assets/effect/Thunderstrike w blur.png", pos, 40.f, 3.f, Anchor::CENTER);
+                // attack(pos, spell);
                 return true;
             }
         }

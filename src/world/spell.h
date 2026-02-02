@@ -10,10 +10,12 @@ protected:
     SpriteAnim *_anim = nullptr;
     float _damage = 50.f;
 
+    std::string _texture_path;
+    float _scale;
 public:
-    virtual void update(float dt) override;
-    //
     static Spell *addSpellChild(Object *parent, const std::string& texture_path, glm::vec2 position, float damage, float scale = 1.f, Anchor anchor = Anchor::CENTER);
+    virtual void update(float dt) override;
+    Spell* clone();
 
     // GETTER AND SETTER
     void setAnim(SpriteAnim *anim) { _anim = anim; };

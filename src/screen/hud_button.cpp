@@ -89,7 +89,7 @@ void HUDButton::checkHover()
 
     // 更新布尔值，供 checkState 使用
     _is_hover = Game::getInstance().isMouseInRect(_rect);
-    SDL_Log(_is_hover ? "hover" : "not hover");
+    //SDL_Log(_is_hover ? "hover" : "not hover");
 }
 
 bool HUDButton::getIsTrigger()

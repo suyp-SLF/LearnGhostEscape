@@ -39,6 +39,26 @@ int Actor::takeDamage(int damage)
     }
 }
 
+void Actor::removeMoveControl()
+{
+    if(_move_control)
+    {
+        _move_control->setIsDelete(true);
+        _move_control = nullptr;
+    }
+}
+
+void Actor::setMoveControl(MoveControl *move_control)
+{
+    if(_move_control)
+    {
+        _move_control = move_control;
+    }
+    _move_control = move_control;
+    _move_control->setParent(this);
+    safeAddChild(move_control);
+}
+
 void Actor::updateHealthBar()
 {
     if(!_stats || !_health_bar) return;

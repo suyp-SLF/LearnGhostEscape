@@ -39,7 +39,7 @@ void Effect::checkFinish()
         _is_delete = true;
         if (_next_object != nullptr)
         {
-            Game::getInstance().getCurrentScene()->safeAddChild(_next_object);
+            _next_object->setActive(true);
             _next_object = nullptr;
         }
     }

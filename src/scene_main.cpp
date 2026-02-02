@@ -8,6 +8,7 @@
 #include "affiliate/text_label.h"
 #include "screen/hud_text.h"
 #include "screen/hud_button.h"
+#include "screen/hud_skill.h"
 #include "scene_title.h"
 #include "raw/timer.h"
 #include "raw/bg_star.h"
@@ -65,7 +66,14 @@ void SceneMain::init()
                                                  Anchor::CENTER);
 
     _ui_mouse = UIMouse::addUIMouseChild(this, "assets/UI/29.png", "assets/UI/30.png", 1.f, Anchor::CENTER); // 添加鼠标
-    _hud_stats = HUDStats::addHudStatsChild(this, _player, glm::vec2(30.f));                                 // 添加血条
+    _hud_stats = HUDStats::addHudStatsChild(this, _player, glm::vec2(30.f));                              // 添加血条
+
+    auto mainScene = Game::getInstance().getCurrentScene();
+    auto position = glm::vec2(Game::getInstance().getScreenSize().x - 100.f, 30.f);
+    auto _hud_skill = HUDSkill::addHudSkillChild(mainScene, "assets/UI/Electric-Icon.png", position, .1f, Anchor::CENTER);
+    
+    _player->getWeapon()->setHudSkill(_hud_skill);
+    
     TextLabel::addTextLabelChild(_player, "您", "assets/font/VonwaonBitmap-16px.ttf", 16, Anchor::CENTER);   // 添加文本
 }
 bool SceneMain::handleEvents(SDL_Event &event)

@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-// #define DEBUG_MDOE
+#define DEBUG_MDOE
 
 #include "asset_store.h"
 #include "data_struct.h"

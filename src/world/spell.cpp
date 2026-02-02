@@ -9,14 +9,32 @@ void Spell::update(float dt)
     ObjectWorld::update(dt);
     if (_anim->getIsFinish())
     {
-        setDelete(true);
+        setIsDelete(true);
     }
     attack();
+}
+
+Spell *Spell::clone()
+{
+    // 调用 addSpellChild 创建一个全新的实例，传入当前对象的所有属性
+    auto newSpell = Spell::addSpellChild(
+        Game::getInstance().getCurrentScene(),
+        _texture_path,
+        _position,
+        _damage,
+        _scale,
+        _anim->getAnchor()
+    );
+
+    // 如果当前动画有特殊状态（比如播放进度），可以在这里额外同步
+    return newSpell;
 }
 
 Spell *Spell::addSpellChild(Object *parent, const std::string &texture_path, glm::vec2 position, float damage, float scale, Anchor anchor)
 {
     auto spell = new Spell();
+    spell->_texture_path = texture_path;
+    spell->_scale = scale;
     spell->init();
     spell->setDamage(damage);
     spell->_anim = SpriteAnim::addSpriteAnimChild(spell, texture_path, anchor, scale);

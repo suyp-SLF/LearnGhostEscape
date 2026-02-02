@@ -15,8 +15,8 @@ void Spawner::update(float dt)
             auto position = Game::getInstance().randomVec2(
                 Game::getInstance().getCurrentScene()->getCameraPosition(),
                 Game::getInstance().getCurrentScene()->getCameraPosition() + Game::getInstance().getScreenSize());
-            Enemy *enemy = Enemy::addEnemyChild(nullptr, position, _target);
-
+            Enemy *enemy = Enemy::addEnemyChild(Game::getInstance().getCurrentScene(), position, _target);
+            enemy->setActive(false);
             Effect::addEffectChild(Game::getInstance().getCurrentScene(), "assets/effect/184_3_.png", position, 1.f, enemy); // 添加特效
         }
     }

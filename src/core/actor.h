@@ -3,12 +3,14 @@
 
 #include "object_world.h"
 #include "../affiliate/affiliate_bar.h"
+#include "../raw/move_control.h"
 
 class Stats;
 class Actor : public ObjectWorld
 {
 
 protected:
+    MoveControl *_move_control = nullptr;
     Stats* _stats = nullptr;
     AffiliateBar* _health_bar = nullptr;
     glm::vec2 _velocity = glm::vec2(0);
@@ -22,7 +24,11 @@ public:
     virtual void move(float dt);
     virtual int takeDamage(int damage);
 
+    void removeMoveControl();
+
     // getter and setter
+    void setMoveControl(MoveControl* move_control);
+    MoveControl* getMoveControl() { return _move_control; };
     void setVelocity(glm::vec2 velocity) { _velocity = velocity; };
     glm::vec2 getVelocity() { return _velocity; };
 
