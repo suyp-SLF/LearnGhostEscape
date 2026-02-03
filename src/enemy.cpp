@@ -43,8 +43,12 @@ void Enemy::update(float dt)
 
 void Enemy::render()
 {
+    //如果超出屏幕就不渲染
+    RectData enemy_rect = {getRenderPosition() + _current_anim->getOffset(), _current_anim->getSize()};
+    RectData screen_rect = {glm::vec2(0), Game::getInstance().getScreenSize()};
+    if (!Game::getInstance().isRectInRect(enemy_rect, screen_rect)) return;
     Actor::render();
-    Game::getInstance().drawBoundary(_render_position, _render_position, 5.0f, {1.0, 0.0, 0.0, 1.0});
+    Game::getInstance().drawBoundary(getRenderPosition(), getRenderPosition(), 5.0f, {1.0, 0.0, 0.0, 1.0});
 }
 
 void Enemy::clean()

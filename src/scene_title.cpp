@@ -75,12 +75,11 @@ bool SceneTitle::handleEvents(SDL_Event &event)
 {
     if (_credits_text->getIsActive())
     {
-        if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+        if (event.type == SDL_EVENT_MOUSE_BUTTON_UP)
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
                 _credits_text->setActive(false);
-                return true;
             }
         }
     }

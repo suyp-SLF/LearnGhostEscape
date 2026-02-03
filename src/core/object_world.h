@@ -13,11 +13,13 @@ public:
     virtual void init() override;
     virtual void update(float dt) override;
 
-    // GETTER AND SETTER
+    // GETTER
     virtual glm::vec2 getPosition() override { return _position; }
+    virtual glm::vec2 getRenderPosition() override;
+    virtual Collider *getCollider() { return _collider; }
+    // SETTER
     void setPosition(glm::vec2 position);
     virtual void setRenderPosition(const glm::vec2 render_position) override;
     virtual void setCollider(Collider *collider) { _collider = collider; }
-    virtual Collider *getCollider() { return _collider; }
 };
 #endif // OBJECT_WORLD_H

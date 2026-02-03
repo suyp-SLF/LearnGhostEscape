@@ -57,12 +57,17 @@ add_executable(
     src/screen/hud_skill.cpp
     src/screen/hud_text.cpp
     src/screen/hud_button.cpp
+    
+    src/state/button_state_hover.cpp
+    src/state/button_state_normal.cpp
+    src/state/button_state_press.cpp
 
     src/raw/stats.cpp
     src/raw/weapon.cpp
     src/raw/timer.cpp
     src/raw/bg_star.cpp
     src/raw/move_control.cpp
+    src/raw/thunder_spell_creator.cpp
 
     src/world/effect.cpp
     src/world/spell.cpp

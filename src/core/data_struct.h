@@ -1,7 +1,11 @@
 #include <glm/glm.hpp>
 #include <SDL3/SDL.h>
 
-struct RectData {
+struct RectData{
+    glm::vec2 position = {0.0f, 0.0f};
+    glm::vec2 size     = {100.0f, 100.0f};
+};
+struct RectDataEx {
     glm::vec2 position = {0.0f, 0.0f};
     glm::vec2 size     = {100.0f, 100.0f};
     glm::vec4 color    = {1.0f, 1.0f, 1.0f, 1.0f}; // RGBA (0.0 - 1.0)

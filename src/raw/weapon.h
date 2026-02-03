@@ -2,6 +2,8 @@
 #define WEAPON_H
 
 #include "../core/object.h"
+#include "../raw/spell_creator.h"
+
 class Spell;
 class Actor;
 class HUDSkill;

@@ -11,7 +11,12 @@ void ObjectWorld::init()
 void ObjectWorld::update(float dt)
 {
     ObjectScreen::update(dt);
+}
+
+glm::vec2 ObjectWorld::getRenderPosition()
+{
     _render_position = Game::getInstance().getCurrentScene()->worldToScreen(_position);
+    return _render_position;
 }
 
 void ObjectWorld::setPosition(glm::vec2 position)

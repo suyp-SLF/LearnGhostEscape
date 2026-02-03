@@ -12,7 +12,7 @@ public:
     virtual void init() override; // 初始化
     // GETTER AND SETTER
     virtual glm::vec2 getPosition() { return glm::vec2(0, 0); }
-    glm::vec2 getRenderPosition() { return _render_position; }
+    virtual glm::vec2 getRenderPosition() { return _render_position; }
     virtual void setRenderPosition(const glm::vec2 render_position) { _render_position = render_position; }
 };
 #endif // OBJECT_SCREEN_H

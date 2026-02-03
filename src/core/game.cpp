@@ -419,21 +419,34 @@ TTF_Text *Game::createTTFText(const std::string &content, const std::string &fon
 }
 void Game::drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float cell_size, const glm::vec2 offset, const SDL_FColor color)
 {
+    // 1. 安全检查：拒绝负数和极小值，防止死循环
+    if (cell_size <= 1.0f)
+        return;
+    // 只画屏幕内的格子
     SDL_SetRenderDrawColorFloat(_renderer, color.r, color.g, color.b, color.a);
-    // 划线
-    for (float x = top_left.x; x <= bottom_right.x; x += cell_size)
+    for (float x = glm::mod(top_left.x, cell_size); x <= _screen_size.x; x += cell_size)
     {
-        SDL_RenderLine(_renderer, x + offset.x, top_left.y + offset.y, x + offset.x, bottom_right.y + offset.y);
+        SDL_RenderLine(_renderer, x, top_left.y, x, bottom_right.y);
     }
-    for (float y = top_left.y; y <= bottom_right.y; y += cell_size)
+    for (float y = glm::mod(top_left.y, cell_size); y <= _screen_size.y; y += cell_size)
     {
-        SDL_RenderLine(_renderer, top_left.x + offset.x, y + offset.y, bottom_right.x + offset.x, y + offset.y);
+        SDL_RenderLine(_renderer, top_left.x, y, bottom_right.x, y);
     }
     SDL_SetRenderDrawColorFloat(_renderer, 0, 0, 0, 1);
 }
 
 void Game::drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const glm::vec4 color)
 {
+    RectData boundary_rect = {
+        top_left,
+        bottom_right - top_left,
+    };
+    RectData screen_rect = {
+        {0, 0},
+        _screen_size,
+    };
+
+    if (!isRectCollideRect(boundary_rect, screen_rect)) return;
     SDL_SetRenderDrawColorFloat(_renderer, color.r, color.g, color.b, color.a);
     for (size_t i = 0; i < grid_width; i++)
     {
@@ -446,7 +459,7 @@ void Game::drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right
     }
     SDL_SetRenderDrawColorFloat(_renderer, 0, 0, 0, 1);
 }
-void Game::drawRect(const RectData &data)
+void Game::drawRect(const RectDataEx &data)
 {
     // 1. 设置颜色 (GLM float 转 SDL Uint8)
     SDL_SetRenderDrawColor(_renderer,
@@ -572,13 +585,37 @@ void Game::drawPoint(const std::vector<glm::vec2> &points, const glm::vec2 rende
     }
     SDL_SetRenderDrawColorFloat(_renderer, 0, 0, 0, 1);
 }
-
 bool Game::isMouseInRect(const RectData &data)
 {
     return (_mouse_position.x >= data.position.x &&
             _mouse_position.x <= data.position.x + data.size.x &&
             _mouse_position.y >= data.position.y &&
             _mouse_position.y <= data.position.y + data.size.y);
+}
+
+bool Game::isRectCollideRect(const RectData &rect1, const RectData &rect2)
+{
+    // 碰撞
+    if (rect1.position.x > rect2.position.x + rect2.size.x ||
+        rect1.position.x + rect1.size.x < rect2.position.x ||
+        rect1.position.y > rect2.position.y + rect2.size.y ||
+        rect1.position.y + rect1.size.y < rect2.position.y)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool Game::isRectInRect(const RectData &rect1, const RectData &rect2)
+{
+    if (rect1.position.x >= rect2.position.x &&
+        rect1.position.x + rect1.size.x <= rect2.position.x + rect2.size.x &&
+        rect1.position.y >= rect2.position.y &&
+        rect1.position.y + rect1.size.y <= rect2.position.y + rect2.size.y)
+    {
+        return true;
+    }
+    return false;
 }
 
 std::string Game::loadTextFile(const std::string &path)
@@ -609,10 +646,9 @@ void Game::updateMouse()
     // 将窗口原始坐标转换为渲染器的逻辑坐标
     // 结果会自动存入 _mouse_position.x 和 .y
     SDL_RenderCoordinatesFromWindow(
-        _renderer, 
-        rawX, 
-        rawY, 
-        &_mouse_position.x, 
-        &_mouse_position.y
-    );
+        _renderer,
+        rawX,
+        rawY,
+        &_mouse_position.x,
+        &_mouse_position.y);
 }

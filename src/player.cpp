@@ -46,7 +46,7 @@ void Player::update(float dt)
 void Player::render()
 {
     Actor::render();
-    Game::getInstance().drawBoundary(_render_position, _render_position, 5.0f, {1.0, 0.0, 0.0, 1.0});
+    Game::getInstance().drawBoundary(getRenderPosition(), getRenderPosition(), 5.0f, {1.0, 0.0, 0.0, 1.0});
 }
 
 void Player::clean()

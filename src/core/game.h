@@ -116,13 +116,15 @@ public:
     // 用于绘制网格,offset_x和offset_y为网格的偏移量
     void drawGrid(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float cell_size, const glm::vec2 offset, const SDL_FColor color); // 绘制网格
     void drawBoundary(const glm::vec2 &top_left, const glm::vec2 &bottom_right, float grid_width, const glm::vec4 color);                    // 绘制边界
-    void drawRect(const RectData &data);                                                                                                      // 绘制矩形
+    void drawRect(const RectDataEx &data);                                                                                                      // 绘制矩形
     void drawFPS(const glm::vec2 &position, const SDL_FColor color);                                                                          // 绘制FPS
     void drawText(const std::string &content, glm::vec2 position, glm::vec4 color = glm::vec4(1.0f));
     void drawHBar(const glm::vec2 &position, const glm::vec2 &size, float value, const glm::vec4 color); // 绘制水平进度条
     void drawPoint(const std::vector<glm::vec2> &points, const glm::vec2 render_pos, glm::vec4 color); // 绘制点
     // 碰撞检测
     bool isMouseInRect(const RectData &data);
+    bool isRectCollideRect(const RectData &rect1, const RectData &rect2);
+    bool isRectInRect(const RectData &rect1, const RectData &rect2);
     // 读取文件
     std::string loadTextFile(const std::string &path);
 private:
